@@ -1,0 +1,135 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ══════════════════════════════════════════════════════
+   COLOR SYSTEM
+   Light = warm ivory base  |  Dark = deep navy base
+   ALL muted values are solid, not low-opacity rgba.
+   Contrast ratios meet WCAG AA minimums.
+══════════════════════════════════════════════════════ */
+
+:root {                              /* Light mode (default) */
+  --bg-primary:   #f2e9da;
+  --bg-secondary: #ece0cc;
+  --text-primary: #1c1007;          /* nearly-black warm brown – 14:1 on bg */
+  --text-secondary: #3d2b18;        /* dark brown – 9:1 on bg              */
+  --muted:        #6b503a;          /* warm brown – 5:1 on bg              */
+  --muted-2:      #96745a;          /* lighter warm – 3.5:1 on bg          */
+  --accent:       #8a5c28;          /* amber-brown                          */
+  --accent-light: #b8844a;          /* lighter amber                        */
+  --surface:      rgba(255, 250, 242, 0.82);
+  --surface-2:    rgba(252, 246, 234, 0.97);
+  --border:       rgba(100, 70, 40, 0.18);
+  --border-strong: rgba(100, 70, 40, 0.36);
+}
+
+html.dark {                         /* Dark mode */
+  --bg-primary:   #090c1b;
+  --bg-secondary: #0f1226;
+  --text-primary: #f2ead8;          /* warm off-white – 14:1 on bg         */
+  --text-secondary: #d4c4a8;        /* warm cream – 8:1 on bg              */
+  --muted:        #a8967c;          /* warm medium – 5:1 on bg             */
+  --muted-2:      #7a6a58;          /* darker medium – 3.5:1 on bg         */
+  --accent:       #c9a86c;          /* warm gold                            */
+  --accent-light: #e0c88c;          /* lighter gold                         */
+  --surface:      rgba(14, 18, 40, 0.82);
+  --surface-2:    rgba(20, 25, 52, 0.97);
+  --border:       rgba(201, 168, 108, 0.16);
+  --border-strong: rgba(201, 168, 108, 0.32);
+}
+
+/* ── Base reset ─────────────────────────────────────── */
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; overflow-x: clip; }
+
+body {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  overflow-x: clip;
+  transition: background-color 0.7s ease, color 0.7s ease;
+  font-size: 16px;                  /* baseline – never go under this      */
+  line-height: 1.6;
+}
+
+/* ── Scrollbar ───────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: var(--accent);
+  border-radius: 6px;
+  opacity: 0.5;
+}
+
+/* ── Glass / surface ─────────────────────────────────── */
+.glass-panel {
+  background: var(--surface);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid var(--border);
+}
+
+/* ── Utility ──────────────────────────────────────────── */
+.vintage-btn {
+  border: 1px solid var(--border-strong);
+  background: var(--surface-2);
+  transition: transform 0.15s ease, opacity 0.2s ease;
+}
+.vintage-btn:hover  { opacity: 0.8; }
+.vintage-btn:active { transform: scale(0.93); }
+
+/* ── Section label (eyebrow) ─────────────────────────── */
+.eyebrow {
+  font-family: var(--font-cinzel), serif;
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent);
+  display: block;
+}
+
+/* ── Decorative divider ───────────────────────────────── */
+.ornament-line {
+  width: 48px;
+  height: 1px;
+  background: var(--accent);
+  opacity: 0.45;
+  margin: 14px auto 0;
+}
+
+/* ── Animations ───────────────────────────────────────── */
+@keyframes fall {
+  0%   { transform: translateY(-5vh) translateX(0) rotate(0deg); opacity: 0; }
+  8%   { opacity: 0.9; }
+  100% { transform: translateY(108vh) translateX(var(--drift, 40px)) rotate(300deg); opacity: 0; }
+}
+
+@keyframes record-spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+@keyframes eq-bar {
+  0%, 100% { transform: scaleY(0.3); }
+  50%       { transform: scaleY(1); }
+}
+.eq-bar { transform-origin: bottom; animation: eq-bar 0.7s ease-in-out infinite; }
+.eq-bar:nth-child(2) { animation-delay: 0.15s; }
+.eq-bar:nth-child(3) { animation-delay: 0.3s; }
+.eq-bar:nth-child(4) { animation-delay: 0.1s; }
+
+@keyframes hint-pulse {
+  0%, 100% { opacity: 0.55; }
+  50%       { opacity: 1; }
+}
+
+/* ── Reduced motion ───────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
