@@ -16,14 +16,14 @@ export default function MeetTheCouple() {
       <Reveal type="fade-up" className="text-center mb-16">
         <span className="eyebrow">The Couple</span>
         <h2
-          className="font-script mt-3"
+          className="font-serif italic mt-3"
           style={{
-            fontSize: "clamp(44px, 11vw, 64px)",
+            fontSize: "clamp(32px, 8vw, 48px)",
             color: "var(--text-primary)",
             lineHeight: 1.1,
           }}
         >
-          Meet the Couple
+          Meet Us
         </h2>
         <div className="ornament-line" />
       </Reveal>
@@ -39,41 +39,34 @@ export default function MeetTheCouple() {
             <div className="flex flex-col items-center text-center">
               {/* ── Photo ── */}
               <div
-                className="relative mb-7"
+                className="relative mb-7 overflow-hidden"
                 style={{
                   width: 200,
                   height: 260,
-                  borderRadius: 20,
-                  padding: 3,
-                  background:
-                    "linear-gradient(145deg, var(--accent), var(--border-strong) 50%, var(--accent))",
-                  boxShadow: "0 24px 60px rgba(0,0,0,0.22)",
+                  borderRadius: 16,
+                  border: "1px solid var(--border-strong)",
+                  boxShadow: "0 16px 48px rgba(0,0,0,0.15)",
                 }}
               >
-                <div
-                  className="relative w-full h-full overflow-hidden"
-                  style={{ borderRadius: 18 }}
-                >
-                  <Image
-                    src={person.photo}
-                    alt={person.fullName}
-                    fill
-                    className="object-cover"
-                    sizes="200px"
-                  />
-                </div>
+                <Image
+                  src={person.photo}
+                  alt={person.fullName}
+                  fill
+                  className="object-cover"
+                  sizes="200px"
+                />
               </div>
 
-              {/* ── Role eyebrow ── */}
+              {/* ── Role ── */}
               <span className="eyebrow" style={{ color: "var(--accent)" }}>
                 {person.role}
               </span>
 
               {/* ── Full name ── */}
               <h3
-                className="font-script mt-2 leading-none"
+                className="font-serif italic mt-2 leading-none"
                 style={{
-                  fontSize: "clamp(34px, 9vw, 46px)",
+                  fontSize: "clamp(28px, 7vw, 38px)",
                   color: "var(--text-primary)",
                 }}
               >
@@ -83,16 +76,15 @@ export default function MeetTheCouple() {
               {/* ── Divider ── */}
               <div
                 className="w-8 h-px my-4"
-                style={{ background: "var(--accent)", opacity: 0.4 }}
+                style={{ background: "var(--accent)", opacity: 0.3 }}
               />
 
               {/* ── Parents line ── */}
               <p
-                className="font-serif italic leading-relaxed max-w-[230px]"
+                className="font-body leading-relaxed max-w-[230px]"
                 style={{
-                  fontSize: 15,
+                  fontSize: 14,
                   color: "var(--muted)",
-                  fontWeight: 400,
                 }}
               >
                 {person.parentsLine}

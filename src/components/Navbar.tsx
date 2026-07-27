@@ -61,48 +61,7 @@ export default function Navbar() {
 
           {/* Right: theme toggle + hamburger */}
           <div className="flex items-center gap-3">
-            
-            {/* ── Theme Toggle Container with Visual Cue ── */}
-            <div className="relative flex items-center group">
-              {/* Soft Pulsing Ambient Halo */}
-              <div
-                className="absolute -inset-1.5 rounded-full opacity-70 animate-pulse pointer-events-none"
-                style={{
-                  background:
-                    "radial-gradient(circle, var(--accent) 0%, transparent 70%)",
-                  filter: "blur(6px)",
-                }}
-              />
-
-              {/* Pulsing Accent Dot */}
-              <span className="absolute -top-1 -right-1 flex h-2.5 w-2.5 pointer-events-none z-10">
-                <span
-                  className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75"
-                  style={{ background: "var(--accent)" }}
-                />
-                <span
-                  className="relative inline-flex rounded-full h-2.5 w-2.5"
-                  style={{ background: "var(--accent)" }}
-                />
-              </span>
-
-              {/* Micro-tooltip Hint on Hover/Desktop */}
-              <div
-                className="absolute -bottom-8 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none hidden sm:block whitespace-nowrap rounded-md px-2 py-0.5 text-[10px] font-medium shadow-md"
-                style={{
-                  background: "var(--surface)",
-                  color: "var(--text-primary)",
-                  border: "1px solid var(--border)",
-                }}
-              >
-                Day / Night ✦
-              </div>
-
-              {/* Theme Toggle Button */}
-              <div className="relative z-0">
-                <ThemeToggle />
-              </div>
-            </div>
+            <ThemeToggle />
 
             <button
               id="nav-mobile-toggle"

@@ -1,32 +1,33 @@
 "use client";
 
 import { useState } from "react";
-import LoadingScreen from "@/components/LoadingScreen";
 import Navbar from "@/components/Navbar";
 import AtmosphereBackground from "@/components/AtmosphereBackground";
-import SectionPetals from "@/components/SectionPetals";
+import MusicPlayer from "@/components/VintageMusicPlayer";
+import EnvelopeGate from "@/components/EnvelopeGate";
 
 import Hero from "@/components/sections/Hero";
 import MeetTheCouple from "@/components/sections/MeetTheCouple";
 import GallerySection from "@/components/sections/GallerySection";
 import WeddingEvents from "@/components/sections/WeddingEvents";
 import RsvpSection from "@/components/sections/RsvpSection";
+import GuestbookSection from "@/components/sections/GuestbookSection";
 import ThankYouSection, { Footer } from "@/components/sections/ThankYouSection";
 
 export default function Home() {
-  const [loaded, setLoaded] = useState(false);
+  const [envelopeOpened, setEnvelopeOpened] = useState(false);
 
   return (
     <>
-      <LoadingScreen onDone={() => setLoaded(true)} />
       <AtmosphereBackground />
-      <SectionPetals />
+      <EnvelopeGate onOpen={() => setEnvelopeOpened(true)} />
 
-      {loaded && (
+      {envelopeOpened && (
         <>
           <Navbar />
           <main className="relative overflow-x-clip w-full">
             <Hero />
+            <MusicPlayer />
             <MeetTheCouple />
             <GallerySection />
             <WeddingEvents />
