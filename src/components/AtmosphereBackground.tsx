@@ -86,24 +86,24 @@ export default function AtmosphereBackground() {
   // and CSS custom properties so a single shared @keyframes handles the motion.
   const shootingStars = useMemo(
     () =>
-      Array.from({ length: 4 }, (_, i) => {
+      Array.from({ length: 2 }, (_, i) => {
         const paletteIndex = Math.floor(
           seededRandom(i * 23.5) * SHOOTING_STAR_PALETTES.length,
         );
         const palette = SHOOTING_STAR_PALETTES[paletteIndex];
-        const length = Math.round(90 + seededRandom(i * 41.3) * 55); // 90–145 px
-        const travel = Math.round(480 + seededRandom(i * 37.7) * 180); // 480–660 px
-        const duration = 0.65 + seededRandom(i * 53.1) * 0.45; // 0.65–1.10 s
-        const repeatDelay = 9 + seededRandom(i * 61.7) * 9; // 9–18 s
+        const length = Math.round(80 + seededRandom(i * 41.3) * 40); // 80–120 px
+        const travel = Math.round(480 + seededRandom(i * 37.7) * 160); // 480–640 px
+        const duration = 0.7 + seededRandom(i * 53.1) * 0.4; // 0.70–1.10 s
+        const repeatDelay = 18 + seededRandom(i * 61.7) * 12; // 18–30 s
         // Total CSS animation-duration = streak + idle time.
         const cycle = duration + repeatDelay;
-        // Staggered initial delay mirrors file 2: i*5 + rand*4
-        const delay = i * 5 + seededRandom(i * 29.3) * 4;
+        // Large staggered initial delay so they don't fire together
+        const delay = i * 12 + seededRandom(i * 29.3) * 6;
 
         return {
           id: i,
-          top: 4 + seededRandom(i * 17.3) * 22,   // 4–26 %
-          left: 52 + seededRandom(i * 21.9) * 36,  // 52–88 %
+          top: 5 + seededRandom(i * 17.3) * 20,   // 5–25 %
+          left: 55 + seededRandom(i * 21.9) * 30,  // 55–85 %
           length,
           travel,
           duration,
@@ -185,12 +185,13 @@ export default function AtmosphereBackground() {
          * rotate(135deg) matches the direction used in FairyLights.
          */
         @keyframes shoot-v2 {
-          0%    { transform: translate3d(0,0,0) rotate(135deg); opacity: 0; }
-          0.6%  { opacity: 1; }
+          0%    { transform: translate3d(var(--ss-tx), var(--ss-ty), 0) rotate(135deg); opacity: 0; }
+          0.1%  { transform: translate3d(0,0,0) rotate(135deg); opacity: 0; }
+          1%    { opacity: 1; }
           6.5%  { transform: translate3d(var(--ss-tx), var(--ss-ty), 0) rotate(135deg); opacity: 1; }
           7.5%  { transform: translate3d(var(--ss-tx), var(--ss-ty), 0) rotate(135deg); opacity: 0; }
-          7.51% { transform: translate3d(0,0,0) rotate(135deg); opacity: 0; }
-          100%  { transform: translate3d(0,0,0) rotate(135deg); opacity: 0; }
+          7.51% { transform: translate3d(var(--ss-tx), var(--ss-ty), 0) rotate(135deg); opacity: 0; }
+          100%  { transform: translate3d(var(--ss-tx), var(--ss-ty), 0) rotate(135deg); opacity: 0; }
         }
 
         @keyframes bird-fly { 0%{ transform: translate3d(-10vw,0,0); } 100%{ transform: translate3d(110vw,0,0); } }
@@ -587,6 +588,8 @@ export default function AtmosphereBackground() {
                 filter: `drop-shadow(0 0 3px ${s.glow}) drop-shadow(0 0 7px ${s.glow})`,
                 animationDuration: `${s.cycle}s`,
                 animationDelay: `${s.delay}s`,
+                opacity: 0,
+                transform: "translate3d(var(--ss-tx), var(--ss-ty), 0) rotate(135deg)",
                 // CSS custom properties consumed by @keyframes shoot-v2
                 "--ss-tx": `-${s.travel}px`,
                 "--ss-ty": `${s.travel}px`,

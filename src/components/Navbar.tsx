@@ -38,10 +38,10 @@ export default function Navbar() {
       <style>{`
         @keyframes hint-float {
           0%, 100% { transform: translateX(-50%) translateY(0px); }
-          50%       { transform: translateX(-50%) translateY(-5px); }
+          50%       { transform: translateX(-50%) translateY(4px); }
         }
         @keyframes hint-fade-in {
-          from { opacity: 0; transform: translateX(-50%) translateY(8px) scale(0.9); }
+          from { opacity: 0; transform: translateX(-50%) translateY(-6px) scale(0.9); }
           to   { opacity: 1; transform: translateX(-50%) translateY(0px) scale(1); }
         }
         @keyframes ring-pulse {
@@ -93,12 +93,24 @@ export default function Navbar() {
                 {showThemeHint && (
                   <div
                     className="hint-badge pointer-events-none absolute z-50"
-                    style={{ bottom: "calc(100% + 10px)", left: "50%", whiteSpace: "nowrap" }}
+                    style={{ top: "calc(100% + 8px)", left: "50%", whiteSpace: "nowrap" }}
                     aria-hidden="true"
                   >
+                    {/* Upward caret pointing at the toggle */}
+                    <div
+                      style={{
+                        width: 0,
+                        height: 0,
+                        borderLeft: "5px solid transparent",
+                        borderRight: "5px solid transparent",
+                        borderBottom: "6px solid rgba(212,175,55,0.9)",
+                        margin: "0 auto",
+                        marginBottom: "-1px",
+                      }}
+                    />
                     {/* Badge pill */}
                     <div
-                      className="flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[11px] font-bold uppercase tracking-wider mx-auto w-fit"
+                      className="flex items-center gap-1 rounded-full px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider mx-auto w-fit"
                       style={{
                         background: "linear-gradient(135deg, rgba(18,12,0,0.93) 0%, rgba(38,26,0,0.90) 100%)",
                         border: "1.5px solid rgba(212,175,55,0.9)",
@@ -107,22 +119,10 @@ export default function Navbar() {
                         backdropFilter: "blur(10px)",
                       }}
                     >
-                      <span style={{ fontSize: 13 }}>☀️</span>
+                      <span style={{ fontSize: 11 }}>☀️</span>
                       <span>Switch theme</span>
-                      <span style={{ fontSize: 13 }}>🌙</span>
+                      <span style={{ fontSize: 11 }}>🌙</span>
                     </div>
-                    {/* Downward caret pointing at the toggle */}
-                    <div
-                      style={{
-                        width: 0,
-                        height: 0,
-                        borderLeft: "6px solid transparent",
-                        borderRight: "6px solid transparent",
-                        borderTop: "7px solid rgba(212,175,55,0.9)",
-                        margin: "0 auto",
-                        marginTop: "-1px",
-                      }}
-                    />
                   </div>
                 )}
 

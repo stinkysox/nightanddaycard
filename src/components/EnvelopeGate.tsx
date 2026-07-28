@@ -55,58 +55,62 @@ export default function EnvelopeGate({ onOpen }: { onOpen: () => void }) {
           }}
         />
 
-        {/* ── STYLISH FAIRY LIGHTS STRING (TOP) ── */}
-        <div className="absolute top-0 inset-x-0 h-28 pointer-events-none z-40 overflow-hidden flex justify-center">
+        {/* ── ELEGANT MICRO-LED FAIRY LIGHTS STRING (TOP) ── */}
+        <div className="absolute top-0 inset-x-0 h-32 pointer-events-none z-40 overflow-hidden flex justify-center">
           <style>{`
             @keyframes fairy-twinkle {
-              0%, 100% { opacity: 0.35; transform: scale(0.85); filter: drop-shadow(0 0 4px rgba(255, 215, 120, 0.4)); }
-              50% { opacity: 1; transform: scale(1.15); filter: drop-shadow(0 0 12px rgba(255, 225, 150, 0.9)); }
+              0%, 100% { opacity: 0.25; transform: scale(0.7); filter: drop-shadow(0 0 3px rgba(255, 235, 180, 0.3)); }
+              50% { opacity: 0.95; transform: scale(1.1); filter: drop-shadow(0 0 8px rgba(255, 243, 205, 0.8)); }
             }
             @keyframes fairy-sway {
-              0%, 100% { transform: translateY(0px); }
-              50% { transform: translateY(3px); }
+              0%, 100% { transform: translateY(0px) rotate(0deg); }
+              50% { transform: translateY(2px) rotate(0.3deg); }
             }
           `}</style>
 
-          {/* Hanging Wire Curve */}
+          {/* Ultra-Fine Hanging Wire Curve */}
           <svg
-            className="absolute top-0 w-full max-w-4xl h-16 text-amber-200/20"
+            className="absolute top-0 w-full max-w-5xl h-20 text-amber-100/15"
             viewBox="0 0 1000 120"
             fill="none"
             preserveAspectRatio="none"
           >
             <path
-              d="M0,0 Q250,90 500,90 Q750,90 1000,0"
+              d="M0,0 Q250,85 500,85 Q750,85 1000,0"
               stroke="currentColor"
-              strokeWidth="1.2"
+              strokeWidth="0.75"
               fill="none"
             />
           </svg>
 
-          {/* Glowing Bulbs Container */}
-          <div className="absolute top-0 w-full max-w-3xl h-20 flex justify-between px-6 sm:px-16 animate-[fairy-sway_6s_ease-in-out_infinite]">
+          {/* Delicate Glowing Micro-Bulbs Container */}
+          <div className="absolute top-0 w-full max-w-4xl h-24 flex justify-between px-6 sm:px-12 animate-[fairy-sway_7s_ease-in-out_infinite]">
             {[
-              { left: "5%", delay: "0s", duration: "2.4s" },
-              { left: "15%", delay: "0.7s", duration: "1.9s" },
-              { left: "25%", delay: "1.2s", duration: "2.8s" },
-              { left: "35%", delay: "0.3s", duration: "2.1s" },
-              { left: "45%", delay: "1.5s", duration: "2.6s" },
-              { left: "55%", delay: "0.9s", duration: "2.2s" },
-              { left: "65%", delay: "0.2s", duration: "2.5s" },
-              { left: "75%", delay: "1.1s", duration: "2.0s" },
-              { left: "85%", delay: "0.6s", duration: "2.7s" },
-              { left: "95%", delay: "1.4s", duration: "2.3s" },
+              { left: "4%", delay: "0.2s", duration: "2.6s" },
+              { left: "12%", delay: "1.1s", duration: "2.1s" },
+              { left: "20%", delay: "0.5s", duration: "3.2s" },
+              { left: "28%", delay: "1.8s", duration: "2.4s" },
+              { left: "36%", delay: "0.8s", duration: "2.9s" },
+              { left: "44%", delay: "0.1s", duration: "2.2s" },
+              { left: "52%", delay: "1.4s", duration: "2.7s" },
+              { left: "60%", delay: "0.6s", duration: "2.0s" },
+              { left: "68%", delay: "1.2s", duration: "3.0s" },
+              { left: "76%", delay: "0.3s", duration: "2.5s" },
+              { left: "84%", delay: "1.6s", duration: "2.3s" },
+              { left: "92%", delay: "0.9s", duration: "2.8s" },
+              { left: "98%", delay: "0.4s", duration: "2.1s" },
             ].map((bulb, i) => (
               <div
                 key={i}
                 className="absolute flex flex-col items-center"
                 style={{ left: bulb.left }}
               >
-                {/* Tiny socket mount */}
-                <div className="w-[3px] h-[6px] bg-slate-600 rounded-t-sm" />
-                {/* Glowing Bulb */}
+                {/* Ultra-thin wire drop */}
+                <div className="w-[0.5px] h-3 sm:h-4 bg-amber-100/20" />
+                
+                {/* Soft Micro-LED Glow Dot */}
                 <div
-                  className="w-2.5 h-3 sm:w-3.5 sm:h-4 rounded-full bg-gradient-to-t from-amber-500 via-amber-200 to-white shadow-[0_0_12px_3px_rgba(255,215,120,0.7)]"
+                  className="w-1.5 h-2 sm:w-2 sm:h-2.5 rounded-full bg-gradient-to-t from-amber-200 via-amber-100 to-white shadow-[0_0_8px_2px_rgba(255,240,200,0.6)]"
                   style={{
                     animation: `fairy-twinkle ${bulb.duration} ease-in-out infinite`,
                     animationDelay: bulb.delay,

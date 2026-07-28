@@ -98,7 +98,7 @@ export default function FairyLightDivider({ count = 7 }: FairyLightDividerProps)
         .fld-root {
           position: relative;
           width: 100%;
-          height: clamp(64px, 9vw, 96px);
+          height: clamp(48px, 7vw, 72px);
         }
 
         .fld-wire {
@@ -127,10 +127,10 @@ export default function FairyLightDivider({ count = 7 }: FairyLightDividerProps)
           position: absolute;
           left: 50%;
           top: 50%;
-          width: clamp(28px, 4.2vw, 44px);
-          height: clamp(28px, 4.2vw, 44px);
-          margin-left: calc(clamp(28px, 4.2vw, 44px) / -2);
-          margin-top: calc(clamp(28px, 4.2vw, 44px) / -2);
+          width: clamp(18px, 2.8vw, 30px);
+          height: clamp(18px, 2.8vw, 30px);
+          margin-left: calc(clamp(18px, 2.8vw, 30px) / -2);
+          margin-top: calc(clamp(18px, 2.8vw, 30px) / -2);
           border-radius: 50%;
           background: radial-gradient(
             circle,
@@ -145,10 +145,10 @@ export default function FairyLightDivider({ count = 7 }: FairyLightDividerProps)
           position: absolute;
           left: 50%;
           top: 50%;
-          width: clamp(9px, 1.1vw, 13px);
-          height: clamp(9px, 1.1vw, 13px);
-          margin-left: calc(clamp(9px, 1.1vw, 13px) / -2);
-          margin-top: calc(clamp(9px, 1.1vw, 13px) / -2);
+          width: clamp(6px, 0.75vw, 9px);
+          height: clamp(6px, 0.75vw, 9px);
+          margin-left: calc(clamp(6px, 0.75vw, 9px) / -2);
+          margin-top: calc(clamp(6px, 0.75vw, 9px) / -2);
           border-radius: 50%;
           background: var(--fld-color);
           box-shadow:
