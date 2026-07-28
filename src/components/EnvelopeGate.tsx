@@ -55,8 +55,70 @@ export default function EnvelopeGate({ onOpen }: { onOpen: () => void }) {
           }}
         />
 
+        {/* ── STYLISH FAIRY LIGHTS STRING (TOP) ── */}
+        <div className="absolute top-0 inset-x-0 h-28 pointer-events-none z-40 overflow-hidden flex justify-center">
+          <style>{`
+            @keyframes fairy-twinkle {
+              0%, 100% { opacity: 0.35; transform: scale(0.85); filter: drop-shadow(0 0 4px rgba(255, 215, 120, 0.4)); }
+              50% { opacity: 1; transform: scale(1.15); filter: drop-shadow(0 0 12px rgba(255, 225, 150, 0.9)); }
+            }
+            @keyframes fairy-sway {
+              0%, 100% { transform: translateY(0px); }
+              50% { transform: translateY(3px); }
+            }
+          `}</style>
+
+          {/* Hanging Wire Curve */}
+          <svg
+            className="absolute top-0 w-full max-w-4xl h-16 text-amber-200/20"
+            viewBox="0 0 1000 120"
+            fill="none"
+            preserveAspectRatio="none"
+          >
+            <path
+              d="M0,0 Q250,90 500,90 Q750,90 1000,0"
+              stroke="currentColor"
+              strokeWidth="1.2"
+              fill="none"
+            />
+          </svg>
+
+          {/* Glowing Bulbs Container */}
+          <div className="absolute top-0 w-full max-w-3xl h-20 flex justify-between px-6 sm:px-16 animate-[fairy-sway_6s_ease-in-out_infinite]">
+            {[
+              { left: "5%", delay: "0s", duration: "2.4s" },
+              { left: "15%", delay: "0.7s", duration: "1.9s" },
+              { left: "25%", delay: "1.2s", duration: "2.8s" },
+              { left: "35%", delay: "0.3s", duration: "2.1s" },
+              { left: "45%", delay: "1.5s", duration: "2.6s" },
+              { left: "55%", delay: "0.9s", duration: "2.2s" },
+              { left: "65%", delay: "0.2s", duration: "2.5s" },
+              { left: "75%", delay: "1.1s", duration: "2.0s" },
+              { left: "85%", delay: "0.6s", duration: "2.7s" },
+              { left: "95%", delay: "1.4s", duration: "2.3s" },
+            ].map((bulb, i) => (
+              <div
+                key={i}
+                className="absolute flex flex-col items-center"
+                style={{ left: bulb.left }}
+              >
+                {/* Tiny socket mount */}
+                <div className="w-[3px] h-[6px] bg-slate-600 rounded-t-sm" />
+                {/* Glowing Bulb */}
+                <div
+                  className="w-2.5 h-3 sm:w-3.5 sm:h-4 rounded-full bg-gradient-to-t from-amber-500 via-amber-200 to-white shadow-[0_0_12px_3px_rgba(255,215,120,0.7)]"
+                  style={{
+                    animation: `fairy-twinkle ${bulb.duration} ease-in-out infinite`,
+                    animationDelay: bulb.delay,
+                  }}
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+
         {/* ── ENVELOPE CONTAINER ── */}
-        <div className="relative w-full max-w-[340px] xs:max-w-[380px] sm:max-w-[430px] aspect-[4/3] flex items-center justify-center">
+        <div className="relative w-full max-w-[340px] xs:max-w-[380px] sm:max-w-[430px] aspect-[4/3] flex items-center justify-center mt-6">
           {/* Subtle Ambient Shadow Under Envelope */}
           <div className="absolute -bottom-6 w-[88%] h-8 bg-black/80 blur-xl rounded-full pointer-events-none" />
 

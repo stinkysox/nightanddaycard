@@ -18,14 +18,14 @@ export const couple = {
     firstName: "Vigna",
     fullName: "Vigna Krishnan",
     // Replace with your photo:  public/images/bride.jpg
-    photo: "/images/bride.jpg",
+    photo: "https://i.pinimg.com/vwebp/1200x/2d/db/d8/2ddbd8ae44f3b46d48b0612723016a40.webp",
     parentsLine: "Loving daughter of Mr. Suresh & Mrs. Lakshmi Krishnan",
   },
   groom: {
     firstName: "Vinay",
     fullName: "Vinay Varma",
     // Replace with your photo:  public/images/groom.jpg
-    photo: "/images/groom.jpg",
+    photo: "https://i.pinimg.com/vwebp/1200x/6c/3d/c9/6c3dc93daf97605977481f0215e01233.webp",
     parentsLine: "Son of Mr. Ravi & Mrs. Padma Varma",
   },
   // Displayed as monogram in nav, loading, footer
@@ -34,7 +34,7 @@ export const couple = {
 
 // ─── Hero Section ────────────────────────────────────────────────────────────
 // Replace with a beautiful couple photo:  public/images/hero.jpg
-export const heroImage = "/images/hero.jpg";
+export const heroImage = "https://i.pinimg.com/vwebp/736x/85/9d/cd/859dcdf4a25b8788a5e79780fb7bedbf.webp";
 
 // ─── Date & Venue ────────────────────────────────────────────────────────────
 export const weddingDateTime = "2026-12-12T09:00:00+05:30";
@@ -79,12 +79,12 @@ export const events = [
 // ─── Gallery ─────────────────────────────────────────────────────────────────
 // Replace each src with your photo:  public/images/gallery-1.jpg  etc.
 export const gallery = [
-  { id: 1, src: "/images/gallery-1.jpg", tall: true },
-  { id: 2, src: "/images/gallery-2.jpg", tall: false },
-  { id: 3, src: "/images/gallery-3.jpg", tall: false },
-  { id: 4, src: "/images/gallery-4.jpg", tall: true },
-  { id: 5, src: "/images/gallery-5.jpg", tall: false },
-  { id: 6, src: "/images/gallery-6.jpg", tall: true },
+  { id: 1, src: "https://i.pinimg.com/736x/7a/e9/72/7ae972372d17b33f43fe618105379a08.jpg", tall: true },
+  { id: 2, src: "https://i.pinimg.com/vwebp/736x/c4/74/ad/c474ad18ac47fe387677707d767b0a60.webp", tall: false },
+  { id: 3, src: "https://i.pinimg.com/736x/c7/9a/e4/c79ae4348d6e3eb725f763358065cfe4.jpg", tall: false },
+  { id: 4, src: "https://i.pinimg.com/vwebp/736x/55/89/6c/55896c47d6fbb34251b59e8274e1980e.webp", tall: true },
+  { id: 5, src: "https://i.pinimg.com/736x/bf/d6/96/bfd696c2356d2f2c46142d41087b2c0d.jpg", tall: false },
+  { id: 6, src: "https://i.pinimg.com/736x/2a/5d/1f/2a5d1fd0491f67a5ab5b480f74c85f65.jpg", tall: true },
 ];
 
 // ─── Music ───────────────────────────────────────────────────────────────────

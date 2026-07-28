@@ -110,8 +110,6 @@ export default function ThankYouSection() {
         type="fade-up"
         className="relative z-10 w-full max-w-2xl mx-auto flex flex-col items-center"
       >
-        <Candle />
-
         {/* ── Premium Envelope ── */}
         <button
           type="button"
@@ -201,10 +199,15 @@ export default function ThankYouSection() {
       >
         <div className="ty-letter-inner">
           <div className="ty-letter-content">
-            {/* Elegant Header */}
-            <span className="block uppercase tracking-[0.25em] text-[11px] font-semibold text-accent/80 mb-4">
+            {/* 1. Letter / Header Comes First */}
+            <span className="block uppercase tracking-[0.25em] text-[11px] font-semibold text-accent/80 mb-6">
               With Love
             </span>
+
+            {/* 2. Then Comes the Candle */}
+            <Candle />
+
+            {/* 3. Then Comes the Thank You Section */}
             <h2 className="font-serif italic text-5xl md:text-[4.2rem] leading-[1.1] text-text-primary tracking-tight mb-8">
               Thank You
             </h2>

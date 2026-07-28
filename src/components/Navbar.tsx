@@ -4,22 +4,34 @@ import { useEffect, useState } from "react";
 import ThemeToggle from "./ThemeToggle";
 import { couple } from "@/data/weddingData";
 
-const links = [
-  { href: "#couple",  label: "Couple"  },
-  { href: "#gallery", label: "Gallery" },
-  { href: "#events",  label: "Events"  },
-  { href: "#rsvp",    label: "RSVP"    },
-];
+const SCROLL_THRESHOLD = 50;
+const THEME_HINT_STORAGE_KEY = "hasSeenThemeHint";
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
-  const [open, setOpen] = useState(false);
+  const [showThemeHint, setShowThemeHint] = useState(false);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 50);
+    const onScroll = () => setScrolled(window.scrollY > SCROLL_THRESHOLD);
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  // Show the "try the theme toggle" hint only until the visitor has
+  // noticed it once (per browser), instead of animating forever.
+  useEffect(() => {
+    const hasSeenHint = window.localStorage.getItem(THEME_HINT_STORAGE_KEY);
+    if (!hasSeenHint) {
+      setShowThemeHint(true);
+    }
+  }, []);
+
+  const dismissThemeHint = () => {
+    if (showThemeHint) {
+      setShowThemeHint(false);
+      window.localStorage.setItem(THEME_HINT_STORAGE_KEY, "true");
+    }
+  };
 
   return (
     <header
@@ -28,7 +40,8 @@ export default function Navbar() {
       }`}
     >
       <div className="max-w-5xl mx-auto px-4">
-        <div
+        <nav
+          aria-label="Primary"
           className="rounded-full px-5 py-2.5 flex items-center justify-between backdrop-blur-md transition-all duration-500"
           style={{
             background: scrolled ? "var(--surface)" : "transparent",
@@ -39,75 +52,41 @@ export default function Navbar() {
           {/* Monogram */}
           <a
             href="#hero"
+            aria-label={`${couple.coupleMonogramText} — back to top`}
             className="font-script"
             style={{ fontSize: 24, color: "var(--text-primary)" }}
           >
             {couple.coupleMonogramText}
           </a>
 
-          {/* Desktop nav */}
-          <nav className="hidden md:flex items-center gap-7">
-            {links.map((l) => (
-              <a
-                key={l.href}
-                href={l.href}
-                className="eyebrow transition-opacity hover:opacity-60"
-                style={{ color: "var(--text-secondary)" }}
-              >
-                {l.label}
-              </a>
-            ))}
-          </nav>
-
-          {/* Right: theme toggle + hamburger */}
+          {/* Right: Theme Toggle */}
           <div className="flex items-center gap-3">
-            <ThemeToggle />
-
-            <button
-              id="nav-mobile-toggle"
-              className="md:hidden rounded-full p-1.5 transition-opacity hover:opacity-60"
-              onClick={() => setOpen((o) => !o)}
-              aria-label="Toggle menu"
-              style={{ color: "var(--text-primary)" }}
+            <div
+              onClick={dismissThemeHint}
+              className={`relative flex items-center gap-2 pl-2.5 pr-1.5 py-1 rounded-full border border-[var(--border-strong)] bg-[var(--card-bg)] shadow-sm transition-shadow ${
+                showThemeHint ? "motion-safe:animate-pulse" : ""
+              }`}
             >
-              {open ? (
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
-                  stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-                  <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
-                </svg>
-              ) : (
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
-                  stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-                  <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/>
-                  <line x1="3" y1="18" x2="21" y2="18"/>
-                </svg>
+              {showThemeHint && (
+                <span
+                  className="font-body text-[10px] uppercase tracking-wider font-semibold select-none hidden sm:inline-block opacity-80"
+                  style={{ color: "var(--text-secondary)" }}
+                >
+                  Theme
+                </span>
               )}
-            </button>
+              {showThemeHint && (
+                <span
+                  aria-hidden="true"
+                  className="text-[var(--accent)] text-xs motion-safe:animate-bounce hidden sm:inline-block"
+                >
+                  &larr;
+                </span>
+              )}
+              <ThemeToggle />
+            </div>
           </div>
-        </div>
-
-        {/* Mobile nav */}
-        {open && (
-          <nav
-            className="md:hidden mt-2 rounded-2xl p-4 flex flex-col gap-4 backdrop-blur-md"
-            style={{
-              background: "var(--surface)",
-              border: "1px solid var(--border)",
-            }}
-          >
-            {links.map((l) => (
-              <a
-                key={l.href}
-                href={l.href}
-                onClick={() => setOpen(false)}
-                className="eyebrow transition-opacity hover:opacity-60"
-                style={{ color: "var(--text-secondary)" }}
-              >
-                {l.label}
-              </a>
-            ))}
-          </nav>
-        )}
+        </nav>
       </div>
     </header>
   );

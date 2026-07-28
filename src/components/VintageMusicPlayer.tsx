@@ -4,35 +4,36 @@ import { useEffect, useRef, useState } from "react";
 import { playlist } from "@/data/weddingData";
 
 function formatTime(s: number) {
-  if (!Number.isFinite(s) || s < 0) return "0:00";
+  if (!Number.isFinite(s) || s < 0) return "000";
   const m = Math.floor(s / 60);
   const sec = Math.floor(s % 60);
-  return `${m}:${String(sec).padStart(2, "0")}`;
+  // Simulating a 3-digit mechanical tape counter
+  return `${String(m).padStart(1, "0")}${String(sec).padStart(2, "0")}`;
 }
 
 const ICONS = {
   prev: (
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
       <path d="M11 18V6l-8.5 6 8.5 6zm.5-6l8.5 6V6l-8.5 6z" />
     </svg>
   ),
   next: (
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
       <path d="M4 18l8.5-6L4 6v12zm9-12v12l8.5-6L13 6z" />
     </svg>
   ),
   play: (
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
       <path d="M8 5v14l11-7z" />
     </svg>
   ),
   pause: (
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
       <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
     </svg>
   ),
   stop: (
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
       <rect x="6" y="6" width="12" height="12" rx="1" />
     </svg>
   ),
@@ -148,9 +149,9 @@ export default function VintageMusicPlayer() {
 
   const progress = duration ? (currentTime / duration) * 100 : 0;
 
-  // Calculate magnetic tape roll size to simulate reel transfer
-  const leftTapeRadius = 22 + (1 - progress / 100) * 16;
-  const rightTapeRadius = 22 + (progress / 100) * 16;
+  // Calculate magnetic tape roll size
+  const leftTapeRadius = 24 + (1 - progress / 100) * 18;
+  const rightTapeRadius = 24 + (progress / 100) * 18;
 
   return (
     <div className="w-full max-w-sm mx-auto p-2 select-none font-sans relative z-10 my-8">
@@ -162,241 +163,276 @@ export default function VintageMusicPlayer() {
           to { transform: rotate(360deg); }
         }
         .animate-walkman-spool {
-          animation: walkman-spool 2.2s linear infinite;
+          animation: walkman-spool 2s linear infinite;
+        }
+        .button-press {
+          box-shadow: inset 0 4px 6px rgba(0,0,0,0.6), inset 0 1px 3px rgba(0,0,0,0.8) !important;
+          transform: translateY(2px);
         }
       `}</style>
 
-      {/* ── WALKMAN MAIN CHASSIS ── */}
+      {/* ── WALKMAN CHASSIS ── */}
       <div
-        className="rounded-3xl p-5 border-2 border-slate-700/80 shadow-2xl relative overflow-hidden"
+        className="rounded-[1.5rem] border border-slate-900 shadow-[0_30px_60px_-15px_rgba(0,0,0,0.7)] relative overflow-hidden"
         style={{
-          background:
-            "linear-gradient(165deg, #333d4c 0%, #1e2430 40%, #12161f 100%)",
-          boxShadow:
-            "0 25px 50px -12px rgba(0, 0, 0, 0.6), inset 0 2px 2px rgba(255, 255, 255, 0.15), inset 0 -3px 5px rgba(0, 0, 0, 0.8)",
+          background: "linear-gradient(175deg, #184b72 0%, #112d4a 60%, #0a1829 100%)",
+          boxShadow: "inset 1px 1px 2px rgba(255,255,255,0.2), inset -2px -4px 8px rgba(0,0,0,0.6), 0 20px 40px rgba(0,0,0,0.5)",
         }}
       >
-        {/* Metallic Bezel Top Line */}
-        <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-slate-500 via-slate-300 to-slate-600 opacity-40" />
-
-        {/* Brand Header */}
-        <div className="flex items-center justify-between pb-3 mb-3 border-b border-slate-800/80">
-          <div>
-            <span className="text-[12px] font-black tracking-[0.25em] text-slate-100 uppercase italic font-sans block leading-none">
-              WALKMAN
-            </span>
-            <span className="text-[7px] font-bold text-amber-500 tracking-[0.3em] uppercase block mt-1">
-              STEREO CASSETTE PLAYER
-            </span>
-          </div>
-
-          {/* Operation Indicator LED */}
-          <div className="flex items-center gap-1.5 bg-slate-950/80 px-2 py-1 rounded-full border border-slate-800">
-            <span className="text-[7px] font-mono text-slate-400 font-bold tracking-wider">
-              BATT
-            </span>
-            <div
-              className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                isPlaying
-                  ? "bg-red-500 shadow-[0_0_8px_#ef4444]"
-                  : "bg-red-950/60"
-              }`}
-            />
-          </div>
-        </div>
-
-        {/* ── CASSETTE DOOR WINDOW ── */}
+        {/* Top Silver Metallic Panel */}
         <div
-          className="rounded-2xl border-2 border-slate-900 p-3 mb-4 relative overflow-hidden"
+          className="h-16 w-full relative"
           style={{
-            background:
-              "linear-gradient(180deg, rgba(15, 20, 28, 0.95) 0%, rgba(8, 10, 15, 0.98) 100%)",
-            boxShadow:
-              "inset 0 4px 15px rgba(0,0,0,0.9), 0 1px 1px rgba(255,255,255,0.08)",
+            background: "linear-gradient(180deg, #e2e5e9 0%, #a8aeb8 100%)",
+            boxShadow: "inset 0 -2px 5px rgba(0,0,0,0.3), inset 0 2px 2px rgba(255,255,255,0.8)",
           }}
         >
-          {/* Transparent Window Glass Reflection */}
-          <div className="absolute -inset-[100%] bg-gradient-to-tr from-transparent via-white/[0.04] to-transparent transform -rotate-45 pointer-events-none" />
-
-          {/* Track Label Badge */}
-          <div className="bg-gradient-to-r from-amber-100 via-amber-50 to-orange-100 border border-amber-200/80 rounded px-3 py-1.5 mb-3 text-center shadow-sm relative z-10">
-            <p className="font-bold text-xs text-slate-900 truncate tracking-tight">
-              {track.title}
-            </p>
-            <p className="text-[9px] font-semibold text-slate-600 truncate mt-0.5 uppercase tracking-wider">
-              {track.artist}
-            </p>
-          </div>
-
-          {/* Magnetic Tape Spools Area */}
-          <div className="flex justify-around items-center py-2 relative z-10">
-            {/* Left Reel */}
-            <div className="relative w-14 h-14 rounded-full bg-slate-950 border-2 border-slate-800 flex items-center justify-center shadow-inner">
-              {/* Dynamic Tape Mass */}
-              <div
-                className="absolute rounded-full bg-gradient-to-r from-amber-950 via-amber-900 to-amber-950 opacity-90 transition-all duration-300"
-                style={{
-                  width: `${leftTapeRadius * 2}%`,
-                  height: `${leftTapeRadius * 2}%`,
-                }}
-              />
-              {/* Spool Teeth */}
-              <div
-                className={`w-7 h-7 rounded-full bg-slate-200 border-2 border-slate-400 flex items-center justify-center relative z-10 ${
-                  isPlaying ? "animate-walkman-spool" : ""
-                }`}
-              >
-                <div className="w-5 h-1 bg-slate-800 absolute" />
-                <div className="w-1 h-5 bg-slate-800 absolute" />
-                <div className="w-2.5 h-2.5 rounded-full bg-slate-900 border border-slate-300 z-10" />
+          {/* Panel details */}
+          <div className="absolute top-3 left-4 right-4 flex justify-between items-start">
+            <div className="flex gap-2 items-center">
+              {/* Headphone Jacks */}
+              <div className="flex flex-col items-center gap-1">
+                <div className="w-4 h-4 rounded-full bg-gradient-to-br from-zinc-800 to-zinc-950 border border-zinc-400 shadow-inner flex items-center justify-center">
+                  <div className="w-2 h-2 rounded-full bg-black shadow-[inset_0_2px_4px_rgba(0,0,0,1)]" />
+                </div>
+                <span className="text-[6px] font-mono font-bold text-zinc-700 tracking-widest uppercase">Guys</span>
+              </div>
+              <div className="flex flex-col items-center gap-1">
+                <div className="w-4 h-4 rounded-full bg-gradient-to-br from-zinc-800 to-zinc-950 border border-zinc-400 shadow-inner flex items-center justify-center">
+                  <div className="w-2 h-2 rounded-full bg-black shadow-[inset_0_2px_4px_rgba(0,0,0,1)]" />
+                </div>
+                <span className="text-[6px] font-mono font-bold text-zinc-700 tracking-widest uppercase">Dolls</span>
               </div>
             </div>
-
-            {/* Tape Center Window / Counter */}
-            <div className="text-center px-1">
-              <div className="bg-slate-950 border border-slate-800 rounded px-2.5 py-1 shadow-inner">
-                <span className="font-mono text-[11px] text-amber-500 font-bold tracking-widest block">
-                  {formatTime(currentTime)}
-                </span>
+            
+            {/* Battery / Op LED */}
+            <div className="flex flex-col items-center gap-1">
+              <div className={`w-3 h-3 rounded-full border border-zinc-500 shadow-inner flex items-center justify-center bg-zinc-900`}>
+                <div className={`w-2 h-2 rounded-full transition-all duration-300 ${isPlaying ? 'bg-red-500 shadow-[0_0_8px_#ef4444]' : 'bg-red-950'}`} />
               </div>
-              <span className="text-[7px] font-mono text-slate-500 tracking-tighter uppercase block mt-1">
-                TAPE CNT
+              <span className="text-[6px] font-bold text-zinc-700 tracking-widest uppercase">Opr/Batt</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Brand Header */}
+        <div className="px-5 pt-4 pb-2">
+          <div className="flex items-end gap-3">
+            {/* Fake logo mark */}
+            <div className="w-6 h-6 rounded-sm bg-gradient-to-br from-zinc-200 to-zinc-400 flex items-center justify-center shadow-sm">
+              <div className="w-4 h-4 border-[2px] border-zinc-600 rounded-full flex items-center justify-center">
+                <div className="w-1.5 h-1.5 bg-zinc-600 rounded-full" />
+              </div>
+            </div>
+            <div>
+              <span className="text-[18px] font-black tracking-[0.2em] text-white uppercase italic font-sans block leading-none shadow-black drop-shadow-md">
+                WALKMAN
+              </span>
+              <span className="text-[8px] font-bold text-sky-200 tracking-[0.25em] uppercase block mt-0.5 opacity-80">
+                STEREO CASSETTE PLAYER
               </span>
             </div>
+          </div>
+        </div>
 
-            {/* Right Reel */}
-            <div className="relative w-14 h-14 rounded-full bg-slate-950 border-2 border-slate-800 flex items-center justify-center shadow-inner">
-              {/* Dynamic Tape Mass */}
-              <div
-                className="absolute rounded-full bg-gradient-to-r from-amber-950 via-amber-900 to-amber-950 opacity-90 transition-all duration-300"
+        {/* ── CASSETTE DOOR & WINDOW ── */}
+        <div className="px-4 pb-4 relative">
+          <div
+            className="rounded-lg p-3 relative overflow-hidden"
+            style={{
+              background: "#111418",
+              boxShadow: "inset 0 6px 15px rgba(0,0,0,0.8), inset 0 1px 3px rgba(0,0,0,1), 0 1px 1px rgba(255,255,255,0.15)",
+              borderTop: "2px solid #080a0c",
+              borderBottom: "1px solid #2d455d",
+            }}
+          >
+            {/* Cassette Tape Plastic Housing */}
+            <div className="w-full h-full bg-[#dfdcd6] rounded relative border border-black/40 overflow-hidden shadow-[inset_0_0_15px_rgba(0,0,0,0.2)]">
+              
+              {/* Tape Label Sticker */}
+              <div className="absolute top-2 left-4 right-4 h-12 bg-[#c64426] rounded-sm flex flex-col items-center justify-center shadow-sm border border-black/10">
+                <div className="w-full h-1 bg-white/20 absolute top-1" />
+                <p className="font-bold text-xs text-white truncate tracking-tight z-10 px-2 w-full text-center drop-shadow-sm">
+                  {track.title}
+                </p>
+                <p className="text-[9px] font-semibold text-white/80 truncate mt-0.5 uppercase tracking-wider z-10">
+                  {track.artist}
+                </p>
+              </div>
+
+              {/* Tape Reels Area Background */}
+              <div className="absolute top-16 left-6 right-6 h-14 bg-[#1a1a1a] rounded-full flex justify-between items-center px-1 shadow-[inset_0_4px_10px_rgba(0,0,0,0.8)] border border-white/20">
+                
+                {/* Left Reel */}
+                <div className="relative w-12 h-12 rounded-full flex items-center justify-center">
+                  {/* Magnetic Tape Roll */}
+                  <div
+                    className="absolute rounded-full bg-[#2a1c14] border border-[#1a120c] transition-all duration-300 shadow-[0_0_2px_rgba(0,0,0,0.5)]"
+                    style={{
+                      width: `${leftTapeRadius * 2}%`,
+                      height: `${leftTapeRadius * 2}%`,
+                    }}
+                  />
+                  {/* White Plastic Spool Core */}
+                  <div
+                    className={`w-8 h-8 rounded-full bg-[#e5e5e5] border border-gray-400 flex items-center justify-center relative z-10 shadow-sm ${isPlaying ? "animate-walkman-spool" : ""}`}
+                  >
+                    {/* Gear Teeth */}
+                    <div className="w-full h-full relative">
+                      {[0, 60, 120].map((deg, i) => (
+                        <div key={i} className="absolute inset-0 m-auto w-1 h-8 bg-zinc-800" style={{ transform: `rotate(${deg}deg)` }} />
+                      ))}
+                    </div>
+                    {/* Spool Center Pin Hole */}
+                    <div className="w-3 h-3 rounded-full bg-[#111] absolute m-auto shadow-inner border border-zinc-500" />
+                  </div>
+                </div>
+
+                {/* Right Reel */}
+                <div className="relative w-12 h-12 rounded-full flex items-center justify-center">
+                  <div
+                    className="absolute rounded-full bg-[#2a1c14] border border-[#1a120c] transition-all duration-300 shadow-[0_0_2px_rgba(0,0,0,0.5)]"
+                    style={{
+                      width: `${rightTapeRadius * 2}%`,
+                      height: `${rightTapeRadius * 2}%`,
+                    }}
+                  />
+                  <div
+                    className={`w-8 h-8 rounded-full bg-[#e5e5e5] border border-gray-400 flex items-center justify-center relative z-10 shadow-sm ${isPlaying ? "animate-walkman-spool" : ""}`}
+                  >
+                    <div className="w-full h-full relative">
+                      {[0, 60, 120].map((deg, i) => (
+                        <div key={i} className="absolute inset-0 m-auto w-1 h-8 bg-zinc-800" style={{ transform: `rotate(${deg}deg)` }} />
+                      ))}
+                    </div>
+                    <div className="w-3 h-3 rounded-full bg-[#111] absolute m-auto shadow-inner border border-zinc-500" />
+                  </div>
+                </div>
+              </div>
+              
+              {/* Transparent Window Glass Reflection */}
+              <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-transparent pointer-events-none transform translate-y-[-20%] rotate-12 mix-blend-overlay" />
+            </div>
+            
+            {/* Mechanical Tape Counter */}
+            <div className="absolute top-4 right-4 bg-[#111] border-2 border-[#333] shadow-inner rounded-sm px-1.5 py-0.5 flex">
+              {formatTime(currentTime).split('').map((digit, idx) => (
+                <div key={idx} className="bg-white text-black font-mono font-bold text-[10px] w-2.5 text-center leading-tight mx-[1px] border border-gray-400 shadow-inner">
+                  {digit}
+                </div>
+              ))}
+            </div>
+
+          </div>
+
+          {/* Hidden slider for seeking over the cassette door */}
+          <input
+            type="range"
+            min={0}
+            max={100}
+            value={progress || 0}
+            onChange={seek}
+            className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20"
+            aria-label="Seek position"
+          />
+        </div>
+
+        {/* ── MECHANICAL CONTROLS ── */}
+        <div className="px-4 pb-6">
+          <div className="bg-[#0b141d] rounded-xl p-3 border-t border-black/50 shadow-[inset_0_2px_10px_rgba(0,0,0,0.8)]">
+            
+            <div className="grid grid-cols-4 gap-1.5 mb-3">
+              {/* REW Button */}
+              <button
+                type="button"
+                onClick={prevTrack}
+                className="group flex flex-col items-center justify-center h-12 rounded-sm text-zinc-300 transition-all active:button-press"
                 style={{
-                  width: `${rightTapeRadius * 2}%`,
-                  height: `${rightTapeRadius * 2}%`,
+                  background: "linear-gradient(180deg, #3f4551 0%, #20242a 100%)",
+                  boxShadow: "inset 0 1px 1px rgba(255,255,255,0.3), 0 4px 6px rgba(0,0,0,0.4), 0 1px 2px rgba(0,0,0,0.8)",
+                  borderBottom: "3px solid #111",
                 }}
-              />
-              {/* Spool Teeth */}
-              <div
-                className={`w-7 h-7 rounded-full bg-slate-200 border-2 border-slate-400 flex items-center justify-center relative z-10 ${
-                  isPlaying ? "animate-walkman-spool" : ""
-                }`}
               >
-                <div className="w-5 h-1 bg-slate-800 absolute" />
-                <div className="w-1 h-5 bg-slate-800 absolute" />
-                <div className="w-2.5 h-2.5 rounded-full bg-slate-900 border border-slate-300 z-10" />
+                {ICONS.prev}
+                <span className="text-[7px] font-black tracking-wider mt-1 text-zinc-400 group-active:text-white">REW</span>
+              </button>
+
+              {/* PLAY Button */}
+              <button
+                type="button"
+                onClick={togglePlay}
+                className={`group flex flex-col items-center justify-center h-12 rounded-sm transition-all ${isPlaying ? 'button-press text-white' : 'text-zinc-300 active:button-press'}`}
+                style={{
+                  background: isPlaying 
+                    ? "linear-gradient(180deg, #2b303b 0%, #15181c 100%)" 
+                    : "linear-gradient(180deg, #3f4551 0%, #20242a 100%)",
+                  boxShadow: isPlaying 
+                    ? "inset 0 4px 6px rgba(0,0,0,0.6), inset 0 1px 3px rgba(0,0,0,0.8)" 
+                    : "inset 0 1px 1px rgba(255,255,255,0.3), 0 4px 6px rgba(0,0,0,0.4), 0 1px 2px rgba(0,0,0,0.8)",
+                  borderBottom: isPlaying ? "0" : "3px solid #111",
+                }}
+              >
+                {ICONS.play}
+                <span className={`text-[7px] font-black tracking-wider mt-1 ${isPlaying ? 'text-zinc-200' : 'text-zinc-400 group-active:text-white'}`}>PLAY</span>
+              </button>
+
+              {/* STOP Button */}
+              <button
+                type="button"
+                onClick={stopPlay}
+                className="group flex flex-col items-center justify-center h-12 rounded-sm text-zinc-300 transition-all active:button-press"
+                style={{
+                  background: "linear-gradient(180deg, #3f4551 0%, #20242a 100%)",
+                  boxShadow: "inset 0 1px 1px rgba(255,255,255,0.3), 0 4px 6px rgba(0,0,0,0.4), 0 1px 2px rgba(0,0,0,0.8)",
+                  borderBottom: "3px solid #111",
+                }}
+              >
+                {ICONS.stop}
+                <span className="text-[7px] font-black tracking-wider mt-1 text-zinc-400 group-active:text-white">STOP</span>
+              </button>
+
+              {/* FF Button */}
+              <button
+                type="button"
+                onClick={nextTrack}
+                className="group flex flex-col items-center justify-center h-12 rounded-sm text-zinc-300 transition-all active:button-press"
+                style={{
+                  background: "linear-gradient(180deg, #3f4551 0%, #20242a 100%)",
+                  boxShadow: "inset 0 1px 1px rgba(255,255,255,0.3), 0 4px 6px rgba(0,0,0,0.4), 0 1px 2px rgba(0,0,0,0.8)",
+                  borderBottom: "3px solid #111",
+                }}
+              >
+                {ICONS.next}
+                <span className="text-[7px] font-black tracking-wider mt-1 text-zinc-400 group-active:text-white">FF</span>
+              </button>
+            </div>
+
+            {/* Volume Control Slider */}
+            <div className="flex items-center gap-3 bg-black/40 p-2 rounded-lg border border-white/5 shadow-inner">
+              <span className="text-[8px] font-mono font-bold text-zinc-400 tracking-wider">VOL</span>
+              <div className="relative flex-1 flex items-center">
+                {/* Custom slider track to look like a mechanical slot */}
+                <div className="absolute w-full h-1 bg-black rounded-full shadow-[inset_0_1px_3px_rgba(0,0,0,1)] border-b border-white/10 pointer-events-none" />
+                <input
+                  type="range"
+                  min="0"
+                  max="1"
+                  step="0.01"
+                  value={volume}
+                  onChange={(e) => setVolume(parseFloat(e.target.value))}
+                  className="w-full h-4 opacity-0 cursor-pointer z-10"
+                  aria-label="Volume level"
+                />
+                {/* Custom Thumb indicator */}
+                <div 
+                  className="absolute h-3 w-4 bg-gradient-to-b from-zinc-300 to-zinc-500 rounded-[2px] shadow-md border border-black pointer-events-none flex items-center justify-center"
+                  style={{ left: `calc(${volume * 100}% - 8px)` }}
+                >
+                  <div className="w-0.5 h-1.5 bg-black/50" />
+                </div>
               </div>
             </div>
-          </div>
-        </div>
-
-        {/* Seek Progress Bar */}
-        <div className="mb-4 px-1">
-          <div className="relative h-1.5 bg-slate-950 rounded-full overflow-hidden border border-slate-800/80 flex items-center">
-            <div
-              className="h-full bg-gradient-to-r from-amber-500 to-amber-400"
-              style={{ width: `${progress}%` }}
-            />
-            <input
-              type="range"
-              min={0}
-              max={100}
-              value={progress || 0}
-              onChange={seek}
-              className="absolute inset-0 w-full opacity-0 cursor-pointer h-full"
-              aria-label="Seek position"
-            />
-          </div>
-          <div className="flex justify-between text-[8px] font-mono text-slate-400 mt-1 font-semibold">
-            <span>{formatTime(currentTime)}</span>
-            <span>{formatTime(duration)}</span>
-          </div>
-        </div>
-
-        {/* ── MECHANICAL WALKMAN BUTTONS ── */}
-        <div className="grid grid-cols-4 gap-2 mb-4 bg-slate-950/60 p-2 rounded-xl border border-slate-800/80">
-          {/* REW Button */}
-          <button
-            type="button"
-            onClick={prevTrack}
-            className="group flex flex-col items-center py-2 rounded border-t border-l border-slate-500 border-r-2 border-b-2 border-r-slate-950 border-b-slate-950 bg-gradient-to-b from-slate-600 to-slate-800 text-slate-200 active:translate-y-0.5 active:border-r active:border-b transition-all shadow-md"
-            aria-label="Previous Track"
-          >
-            {ICONS.prev}
-            <span className="text-[7px] font-black tracking-wider mt-1 text-slate-300 group-hover:text-white">
-              REW
-            </span>
-          </button>
-
-          {/* PLAY / PAUSE Button */}
-          <button
-            type="button"
-            onClick={togglePlay}
-            className={`group flex flex-col items-center py-2 rounded border-t border-l border-r-2 border-b-2 active:translate-y-0.5 active:border-r active:border-b transition-all shadow-md ${
-              isPlaying
-                ? "border-amber-400 border-r-amber-950 border-b-amber-950 bg-gradient-to-b from-amber-500 to-amber-700 text-slate-950"
-                : "border-slate-500 border-r-slate-950 border-b-slate-950 bg-gradient-to-b from-slate-600 to-slate-800 text-slate-200"
-            }`}
-            aria-label={isPlaying ? "Pause" : "Play"}
-          >
-            {isPlaying ? ICONS.pause : ICONS.play}
-            <span className="text-[7px] font-black tracking-wider mt-1">
-              {isPlaying ? "PAUSE" : "PLAY"}
-            </span>
-          </button>
-
-          {/* STOP Button */}
-          <button
-            type="button"
-            onClick={stopPlay}
-            className="group flex flex-col items-center py-2 rounded border-t border-l border-slate-500 border-r-2 border-b-2 border-r-slate-950 border-b-slate-950 bg-gradient-to-b from-slate-600 to-slate-800 text-slate-200 active:translate-y-0.5 active:border-r active:border-b transition-all shadow-md"
-            aria-label="Stop Playback"
-          >
-            {ICONS.stop}
-            <span className="text-[7px] font-black tracking-wider mt-1 text-slate-300 group-hover:text-white">
-              STOP
-            </span>
-          </button>
-
-          {/* FF Button */}
-          <button
-            type="button"
-            onClick={nextTrack}
-            className="group flex flex-col items-center py-2 rounded border-t border-l border-slate-500 border-r-2 border-b-2 border-r-slate-950 border-b-slate-950 bg-gradient-to-b from-slate-600 to-slate-800 text-slate-200 active:translate-y-0.5 active:border-r active:border-b transition-all shadow-md"
-            aria-label="Next Track"
-          >
-            {ICONS.next}
-            <span className="text-[7px] font-black tracking-wider mt-1 text-slate-300 group-hover:text-white">
-              FF
-            </span>
-          </button>
-        </div>
-
-        {/* Bottom Control Strip (Volume Wheel & Jack Accent) */}
-        <div className="flex items-center justify-between pt-1 border-t border-slate-800/80 px-1">
-          {/* Headphone Jack Decor */}
-          <div className="flex items-center gap-1.5">
-            <div className="w-3 h-3 rounded-full bg-slate-950 border border-slate-700 flex items-center justify-center">
-              <div className="w-1.5 h-1.5 rounded-full bg-slate-800" />
-            </div>
-            <span className="text-[7px] font-mono font-bold text-slate-400 tracking-wider">
-              PHONES
-            </span>
-          </div>
-
-          {/* Volume Control Slider */}
-          <div className="flex items-center gap-2">
-            <span className="text-[7px] font-mono font-bold text-slate-400 tracking-wider">
-              VOL
-            </span>
-            <input
-              type="range"
-              min="0"
-              max="1"
-              step="0.01"
-              value={volume}
-              onChange={(e) => setVolume(parseFloat(e.target.value))}
-              className="w-20 h-1.5 bg-slate-950 rounded-lg appearance-none cursor-pointer accent-amber-500 border border-slate-800"
-              aria-label="Volume level"
-            />
+            
           </div>
         </div>
       </div>
