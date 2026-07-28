@@ -46,11 +46,11 @@ export default function MeetTheCouple() {
       </Reveal>
 
       {/* ── Cards Container ── */}
-      <div className="relative max-w-4xl mx-auto grid md:grid-cols-2 gap-10 md:gap-20 items-center">
+      <div className="relative max-w-[1000px] mx-auto grid md:grid-cols-2 gap-16 md:gap-20 items-start">
         
         {/* ── Center Glowing Heart (Desktop) ── */}
-        <div className="hidden md:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-20 items-center justify-center pointer-events-none">
-          <div className="flex items-center justify-center w-12 h-12 rounded-full bg-[var(--background)] border border-[var(--border-strong)] shadow-[0_0_30px_rgba(212,175,55,0.2)] animate-pulse">
+        <div className="hidden md:flex absolute left-1/2 top-[40%] -translate-x-1/2 -translate-y-1/2 z-20 items-center justify-center pointer-events-none">
+          <div className="flex items-center justify-center w-12 h-12 rounded-full bg-[var(--background)] border border-[var(--border-strong)] shadow-[0_0_30px_rgba(212,175,55,0.15)] animate-pulse">
             <span className="text-[var(--accent)] text-xl">♥</span>
           </div>
         </div>
@@ -65,154 +65,144 @@ export default function MeetTheCouple() {
               type={idx === 0 ? "slide-left" : "slide-right"}
               delay={idx * 0.15}
             >
-              {/* Card Wrapper with 3D Perspective */}
-              <div 
-                className="group relative cursor-pointer w-full max-w-[360px] mx-auto select-none"
-                style={{ perspective: "1200px" }}
-                onClick={() => handleCardClick(idx)}
-              >
+              <div className="group flex flex-col items-center w-full select-none">
+                
+                {/* ──────────────── 3D CARD PORTRAIT ──────────────── */}
                 <div 
-                  className="relative w-full h-[520px] transition-transform duration-700 ease-out"
-                  style={{ 
-                    transformStyle: "preserve-3d",
-                    transform: isFlipped ? "rotateY(180deg)" : "rotateY(0deg)"
-                  }}
+                  className="relative cursor-pointer w-full max-w-[340px] aspect-[4/5] mx-auto"
+                  style={{ perspective: "1500px" }}
+                  onClick={() => handleCardClick(idx)}
                 >
-                  {/* ──────────────── FRONT OF CARD ──────────────── */}
                   <div 
-                    className="absolute inset-0 flex flex-col rounded-[2rem] overflow-hidden transition-shadow duration-500 group-hover:shadow-[0_20px_40px_rgba(0,0,0,0.3)]"
-                    style={{
-                      backfaceVisibility: "hidden",
-                      WebkitBackfaceVisibility: "hidden",
-                      background: "var(--card-bg)",
-                      border: "1px solid var(--border-strong)",
-                      boxShadow: "0 10px 30px rgba(0,0,0,0.15)",
+                    className="relative w-full h-full transition-transform duration-[900ms] ease-[cubic-bezier(0.23,1,0.32,1)] shadow-xl group-hover:shadow-2xl rounded-[2rem]"
+                    style={{ 
+                      transformStyle: "preserve-3d",
+                      transform: isFlipped ? "rotateY(180deg)" : "rotateY(0deg)"
                     }}
                   >
-                    {/* Edge-to-Edge Image (Top 60%) */}
-                    <div className="relative w-full h-[60%] overflow-hidden bg-black/20 pointer-events-none">
+                    {/* FRONT: Full Bleed Image */}
+                    <div 
+                      className="absolute inset-0 rounded-[2rem] overflow-hidden"
+                      style={{
+                        backfaceVisibility: "hidden",
+                        WebkitBackfaceVisibility: "hidden",
+                        background: "var(--card-bg)",
+                        border: "1px solid var(--border-strong)",
+                      }}
+                    >
                       <Image
                         src={person.photo}
                         alt={person.fullName}
                         fill
                         unoptimized
-                        className="object-cover transition-transform duration-1000 ease-out group-hover:scale-110"
-                        sizes="(max-width: 768px) 100vw, 360px"
+                        className="object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-105"
+                        sizes="(max-width: 768px) 90vw, 340px"
                         priority
                         onError={(e) => {
                           const target = e.currentTarget as HTMLImageElement;
-                          target.src = `https://placehold.co/360x312/c9a96e/fff?text=${encodeURIComponent(person.firstName)}`;
+                          target.src = `https://placehold.co/400x500/c9a96e/fff?text=${encodeURIComponent(person.firstName)}`;
                         }}
                       />
-                      {/* Subtle gradient overlay to blend with the card bottom */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-[var(--card-bg)] via-transparent to-transparent opacity-90" />
+                      {/* Subtle Inner Vignette for Premium Look */}
+                      <div className="absolute inset-0 shadow-[inset_0_0_40px_rgba(0,0,0,0.15)] rounded-[2rem] pointer-events-none" />
                     </div>
 
-                    {/* Text Content (Bottom 40%) */}
-                    <div className="flex-1 flex flex-col items-center justify-center p-6 text-center relative z-10 -mt-4 pointer-events-none">
-                      {/* Role */}
-                      <span className="eyebrow tracking-widest text-[11px] uppercase mb-3 font-semibold" style={{ color: "var(--accent)" }}>
-                        {person.role}
-                      </span>
+                    {/* BACK: Story / Details */}
+                    <div 
+                      className="absolute inset-0 flex flex-col justify-center text-center p-8 rounded-[2rem]"
+                      style={{
+                        backfaceVisibility: "hidden",
+                        WebkitBackfaceVisibility: "hidden",
+                        transform: "rotateY(180deg)",
+                        background: "var(--card-bg)",
+                        border: "1px solid var(--border-strong)",
+                      }}
+                    >
+                      <div className="flex flex-col items-center justify-center h-full relative pointer-events-none">
+                        {/* Decorative quote mark */}
+                        <span className="absolute -top-4 left-1/2 -translate-x-1/2 text-[80px] opacity-[0.07] font-serif leading-none" style={{ color: "var(--accent)" }}>
+                          "
+                        </span>
 
-                      {/* Full Name */}
-                      <h3
-                        className="font-serif italic leading-tight"
-                        style={{
-                          fontSize: "clamp(28px, 6vw, 34px)",
-                          color: "var(--text-primary)",
-                        }}
-                      >
-                        {person.fullName}
-                      </h3>
+                        <span className="eyebrow tracking-widest text-[11px] uppercase mb-4" style={{ color: "var(--accent)" }}>
+                          {person.role} Story
+                        </span>
 
-                      {/* Animated Divider */}
-                      <div
-                        className="h-[1px] my-4 transition-all duration-500 w-8 group-hover:w-16"
-                        style={{ background: "var(--accent)", opacity: 0.4 }}
-                      />
+                        <p 
+                          className="font-serif italic my-4 leading-relaxed"
+                          style={{ fontSize: "clamp(16px, 4vw, 18px)", color: "var(--text-primary)" }}
+                        >
+                          {person.quote}
+                        </p>
 
-                      {/* Tap prompt */}
-                      <span 
-                        className="font-body text-[10px] tracking-[0.2em] uppercase transition-opacity duration-300 opacity-60 group-hover:opacity-100 mt-auto flex items-center gap-2"
-                        style={{ color: "var(--accent)" }}
-                      >
-                        Tap to read story
-                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
-                      </span>
+                        <div
+                          className="w-12 h-[1px] my-6 mx-auto"
+                          style={{ background: "var(--accent)", opacity: 0.3 }}
+                        />
+
+                        <h4 
+                          className="font-body uppercase tracking-widest text-[10px] mb-3 font-bold"
+                          style={{ color: "var(--text-primary)" }}
+                        >
+                          Parents
+                        </h4>
+                        <p
+                          className="font-body leading-relaxed px-2"
+                          style={{
+                            fontSize: 14,
+                            color: "var(--muted)",
+                          }}
+                        >
+                          {person.parentsLine}
+                        </p>
+                      </div>
+
+                      <div className="pt-6 mt-auto pointer-events-none">
+                        <span 
+                          className="font-body text-[10px] tracking-[0.2em] uppercase opacity-70 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2"
+                          style={{ color: "var(--accent)" }}
+                        >
+                           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6"></path></svg>
+                          Flip back
+                        </span>
+                      </div>
                     </div>
+
                   </div>
+                </div>
 
-                  {/* ──────────────── BACK OF CARD ──────────────── */}
-                  <div 
-                    className="absolute inset-0 flex flex-col justify-center text-center p-8 rounded-[2rem]"
+                {/* ──────────────── TEXT BELOW CARD ──────────────── */}
+                <div className="mt-8 text-center flex flex-col items-center">
+                  <span className="eyebrow tracking-widest text-[11px] uppercase mb-3 font-semibold" style={{ color: "var(--accent)" }}>
+                    {person.role}
+                  </span>
+                  
+                  <h3
+                    className="font-serif italic leading-none mb-5"
                     style={{
-                      backfaceVisibility: "hidden",
-                      WebkitBackfaceVisibility: "hidden",
-                      transform: "rotateY(180deg)",
-                      background: "var(--card-bg)",
-                      border: "1px solid var(--border-strong)",
-                      boxShadow: "0 10px 30px rgba(0,0,0,0.15)",
+                      fontSize: "clamp(30px, 6vw, 36px)",
+                      color: "var(--text-primary)",
                     }}
                   >
-                    <div className="flex flex-col items-center justify-center h-full relative pointer-events-none">
-                      {/* Decorative quote mark */}
-                      <span className="absolute top-2 left-1/2 -translate-x-1/2 text-6xl opacity-10 font-serif" style={{ color: "var(--accent)" }}>
-                        "
-                      </span>
+                    {person.fullName}
+                  </h3>
 
-                      {/* Role Tag */}
-                      <span className="eyebrow tracking-widest text-[11px] uppercase mb-4" style={{ color: "var(--accent)" }}>
-                        {person.role} Story
-                      </span>
-
-                      {/* Quote */}
-                      <p 
-                        className="font-serif italic my-4 leading-relaxed"
-                        style={{ fontSize: 18, color: "var(--text-primary)" }}
-                      >
-                        {person.quote}
-                      </p>
-
-                      {/* Small Divider */}
-                      <div
-                        className="w-12 h-[1px] my-5 mx-auto"
-                        style={{ background: "var(--accent)", opacity: 0.3 }}
-                      />
-
-                      {/* Parents Details Heading */}
-                      <h4 
-                        className="font-body uppercase tracking-widest text-[10px] mb-2 font-bold"
-                        style={{ color: "var(--text-primary)" }}
-                      >
-                        Parents
-                      </h4>
-
-                      {/* Parents Line */}
-                      <p
-                        className="font-body leading-relaxed px-4"
-                        style={{
-                          fontSize: 14,
-                          color: "var(--muted)",
-                        }}
-                      >
-                        {person.parentsLine}
-                      </p>
-                    </div>
-
-                    {/* Flip Back Hint */}
-                    <div className="pt-6 mt-auto pointer-events-none">
-                      <span 
-                        className="font-body text-[10px] tracking-[0.2em] uppercase opacity-70 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2"
-                        style={{ color: "var(--accent)" }}
-                      >
-                         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6"></path></svg>
-                        Flip back
-                      </span>
-                    </div>
-                  </div>
-
+                  {/* Interactive Flip Trigger */}
+                  <button 
+                    onClick={() => handleCardClick(idx)}
+                    className="group/btn relative font-body text-[10px] tracking-[0.2em] uppercase flex items-center gap-2 px-4 py-2 overflow-hidden"
+                    style={{ color: "var(--accent)" }}
+                    aria-expanded={isFlipped}
+                  >
+                    <span className="relative z-10 flex items-center gap-2 transition-transform duration-300 group-hover/btn:-translate-y-0.5">
+                      {isFlipped ? "Close story" : "Tap to read story"}
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={`transition-transform duration-500 ${isFlipped ? "rotate-180" : ""}`}><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+                    </span>
+                    {/* Minimal button hover effect */}
+                    <div className="absolute bottom-1 left-1/2 -translate-x-1/2 w-0 h-[1px] bg-[var(--accent)] opacity-50 transition-all duration-300 group-hover/btn:w-3/4" />
+                  </button>
                 </div>
+
               </div>
             </Reveal>
           );

@@ -18,14 +18,14 @@ export const couple = {
     firstName: "Vigna",
     fullName: "Vigna Krishnan",
     // Replace with your photo:  public/images/bride.jpg
-    photo: "https://i.pinimg.com/vwebp/1200x/2d/db/d8/2ddbd8ae44f3b46d48b0612723016a40.webp",
+    photo: "https://i.pinimg.com/vwebp/1200x/2d/f9/4d/2df94db13fd4ca3a01e9d208b837f76c.webp",
     parentsLine: "Loving daughter of Mr. Suresh & Mrs. Lakshmi Krishnan",
   },
   groom: {
     firstName: "Vinay",
     fullName: "Vinay Varma",
     // Replace with your photo:  public/images/groom.jpg
-    photo: "https://i.pinimg.com/vwebp/1200x/6c/3d/c9/6c3dc93daf97605977481f0215e01233.webp",
+    photo: "https://i.pinimg.com/736x/fb/e8/a5/fbe8a527ebcf6b20f94e2c704a836d22.jpg",
     parentsLine: "Son of Mr. Ravi & Mrs. Padma Varma",
   },
   // Displayed as monogram in nav, loading, footer

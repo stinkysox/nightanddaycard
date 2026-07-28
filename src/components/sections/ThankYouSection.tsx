@@ -103,7 +103,7 @@ export default function ThankYouSection() {
           aria-expanded={opened}
           aria-controls="ty-letter-panel"
           aria-label={
-            opened ? "Letter opened" : "Untie the ribbon to open your letter"
+            opened ? "Letter opened" : "Break the wax seal to open your letter"
           }
           disabled={opened}
         >
@@ -137,25 +137,21 @@ export default function ThankYouSection() {
             }}
           />
 
-          {/* ── Ribbon & Foil Badge (Replaces the Wax Seal) ── */}
+          {/* ── Elegant Red Wax Seal ── */}
           <div
             className={`absolute inset-0 z-20 pointer-events-none transition-all duration-700 ease-[cubic-bezier(0.25,1,0.3,1)] ${
               opened
-                ? "opacity-0 scale-105 translate-y-4"
+                ? "opacity-0 scale-110 translate-y-6"
                 : "opacity-100 scale-100"
             }`}
           >
-            {/* Horizontal Belly Band */}
-            <div className="absolute top-[56%] left-0 w-full h-[28px] -translate-y-1/2 bg-gradient-to-r from-[#d1b882] via-[#f9f1d8] to-[#d1b882] shadow-[0_2px_4px_rgba(0,0,0,0.1)] border-y border-[#c3a869]/30" />
-
-            {/* Premium Foil Badge */}
-            <div className="absolute top-[56%] left-1/2 w-[64px] h-[64px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#fdfbf9] border border-[#d1b882] flex items-center justify-center shadow-[0_6px_16px_rgba(0,0,0,0.15)] group-hover:scale-105 transition-transform duration-500 ease-out">
-              {/* Inner elegance ring */}
-              <div className="absolute inset-1.5 rounded-full border border-[#d1b882]/50 pointer-events-none" />
-
-              <span className="font-script text-[26px] text-[#b89a55] tracking-tighter leading-none -translate-y-[1px]">
-                {couple.coupleMonogramText}
-              </span>
+            <div className="absolute top-[52%] left-1/2 w-[66px] h-[66px] -translate-x-1/2 -translate-y-1/2 rounded-full p-[3px] bg-[radial-gradient(circle_at_35%_35%,#cc2b2b_0%,#8e0000_60%,#4a0000_100%)] shadow-[0_8px_20px_rgba(0,0,0,0.3),inset_0_2px_4px_rgba(255,255,255,0.3)] group-hover:scale-105 transition-transform duration-500 ease-out flex items-center justify-center">
+              {/* Inner Stamp Rim */}
+              <div className="w-full h-full rounded-full bg-[radial-gradient(circle_at_35%_35%,#a81313_0%,#630202_100%)] border border-[#3b0000]/60 shadow-[inset_0_3px_6px_rgba(0,0,0,0.5),0_1px_2px_rgba(255,255,255,0.2)] flex items-center justify-center">
+                <span className="font-script text-[26px] font-bold text-[#f7e3b5] drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)] select-none tracking-tight">
+                  {couple.coupleMonogramText}
+                </span>
+              </div>
             </div>
           </div>
         </button>
