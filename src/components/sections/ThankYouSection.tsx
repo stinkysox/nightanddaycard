@@ -247,29 +247,6 @@ export default function ThankYouSection() {
 export function Footer() {
   return (
     <footer className="relative py-12 px-5 text-center border-t border-stone-200 dark:border-stone-800/60">
-      <ul className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 mb-8 max-w-3xl mx-auto list-none">
-        {contacts.map((c, idx) => (
-          <li key={c.name} className="flex items-center gap-4 sm:gap-6">
-            <p className="font-body text-[14px] text-text-secondary tracking-wide">
-              <span className="font-medium mr-2">{c.name}</span>
-              <a
-                href={`tel:${c.phone.replace(/\s/g, "")}`}
-                className="transition-colors duration-300 text-accent hover:text-accent/70 inline-block rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2"
-              >
-                {c.phone}
-              </a>
-            </p>
-            {/* Elegant Bullet Separator (hides on mobile, shows between items on desktop) */}
-            {idx !== contacts.length - 1 && (
-              <span
-                className="hidden sm:inline-block w-1 h-1 rounded-full bg-stone-300 dark:bg-stone-700"
-                aria-hidden="true"
-              />
-            )}
-          </li>
-        ))}
-      </ul>
-
       {/* Centered Monogram Footer */}
       <div className="flex flex-col items-center justify-center opacity-50 hover:opacity-100 transition-opacity duration-500 cursor-default">
         <p

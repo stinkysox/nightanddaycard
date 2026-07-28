@@ -17,8 +17,6 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // Show the "try the theme toggle" hint only until the visitor has
-  // noticed it once (per browser), instead of animating forever.
   useEffect(() => {
     const hasSeenHint = window.localStorage.getItem(THEME_HINT_STORAGE_KEY);
     if (!hasSeenHint) {
@@ -53,24 +51,26 @@ export default function Navbar() {
           <a
             href="#hero"
             aria-label={`${couple.coupleMonogramText} — back to top`}
-            className="font-script"
+            className="font-script focus:outline-none"
             style={{ fontSize: 24, color: "var(--text-primary)" }}
           >
             {couple.coupleMonogramText}
           </a>
 
-          {/* Right: Theme Toggle */}
+          {/* Right: Theme Toggle with Clean Radiating Glow */}
           <div className="flex items-center gap-3">
             <div
               onClick={dismissThemeHint}
-              className={`relative flex items-center gap-2 pl-2.5 pr-1.5 py-1 rounded-full border border-[var(--border-strong)] bg-[var(--card-bg)] shadow-sm transition-shadow ${
-                showThemeHint ? "motion-safe:animate-pulse" : ""
+              className={`relative flex items-center gap-2.5 pl-3 pr-2 py-1.5 rounded-full bg-[var(--card-bg)] transition-all duration-500 cursor-pointer focus:outline-none ${
+                showThemeHint
+                  ? "shadow-[0_0_30px_rgba(212,175,55,0.65),0_0_15px_rgba(212,175,55,0.4)] motion-safe:animate-pulse"
+                  : "hover:shadow-[0_0_20px_rgba(212,175,55,0.35)]"
               }`}
             >
               {showThemeHint && (
                 <span
-                  className="font-body text-[10px] uppercase tracking-wider font-semibold select-none hidden sm:inline-block opacity-80"
-                  style={{ color: "var(--text-secondary)" }}
+                  className="font-body text-[10px] uppercase tracking-wider font-semibold select-none hidden sm:inline-block opacity-90"
+                  style={{ color: "var(--accent)" }}
                 >
                   Theme
                 </span>
@@ -83,7 +83,9 @@ export default function Navbar() {
                   &larr;
                 </span>
               )}
-              <ThemeToggle />
+              <div className="focus:outline-none">
+                <ThemeToggle />
+              </div>
             </div>
           </div>
         </nav>

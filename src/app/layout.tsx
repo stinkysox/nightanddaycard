@@ -48,9 +48,53 @@ const dmSerif = DM_Serif_Display({
   display: "swap",
 });
 
+// Comprehensive SEO and Social Sharing Metadata with hardcoded domain
 export const metadata: Metadata = {
-  title: siteMeta.title,
+  metadataBase: new URL("https://www.yourweddingdomain.com"),
+  
+  title: {
+    default: siteMeta.title,
+    template: `%s | ${siteMeta.title}`,
+  },
   description: siteMeta.description,
+  
+  keywords: ["Wedding Invitation", "Our Wedding", siteMeta.title, "Save The Date"],
+  
+  openGraph: {
+    title: siteMeta.title,
+    description: siteMeta.description,
+    url: "https://www.yourweddingdomain.com",
+    siteName: siteMeta.title,
+    images: [
+      {
+        url: "/og-image.jpg",
+        width: 1200,
+        height: 630,
+        alt: siteMeta.title,
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
+
+  twitter: {
+    card: "summary_large_image",
+    title: siteMeta.title,
+    description: siteMeta.description,
+    images: ["/og-image.jpg"],
+  },
+
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
 };
 
 export default function RootLayout({
@@ -59,9 +103,26 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${cinzel.variable} ${playfair.variable} ${greatVibes.variable} ${cormorant.variable} ${dmSerif.variable}`}
+      className={`${cinzel.variable} ${playfair.variable} ${greatVibes.variable} ${cormorant.variable} ${dmSerif.variable} dark`}
       suppressHydrationWarning
     >
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  const stored = localStorage.getItem("wedding-theme");
+                  const theme = stored === "light" ? "light" : "dark";
+                  const root = document.documentElement;
+                  root.classList.remove("dark", "light");
+                  root.classList.add(theme);
+                } catch (e) {}
+              })();
+            `,
+          }}
+        />
+      </head>
       <body className="font-body antialiased">
         <Providers>{children}</Providers>
       </body>

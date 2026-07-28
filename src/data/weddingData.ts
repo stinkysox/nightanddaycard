@@ -1,11 +1,3 @@
-// ═══════════════════════════════════════════════════════════════════════════════
-//  WEDDING DATA — Edit everything here.
-//
-//  Images:  Drop your real photos into  public/images/  and update the paths.
-//  Text:    Every string below appears on the site — just edit and save.
-//  Dates:   Update weddingDateTime (ISO format) plus the display strings.
-// ═══════════════════════════════════════════════════════════════════════════════
-
 // ─── Site Meta (browser tab title & SEO) ─────────────────────────────────────
 export const siteMeta = {
   title: "Vinay & Vigna | Wedding Invitation",
@@ -17,23 +9,19 @@ export const couple = {
   bride: {
     firstName: "Vigna",
     fullName: "Vigna Krishnan",
-    // Replace with your photo:  public/images/bride.jpg
     photo: "https://i.pinimg.com/vwebp/1200x/2d/db/d8/2ddbd8ae44f3b46d48b0612723016a40.webp",
     parentsLine: "Loving daughter of Mr. Suresh & Mrs. Lakshmi Krishnan",
   },
   groom: {
     firstName: "Vinay",
     fullName: "Vinay Varma",
-    // Replace with your photo:  public/images/groom.jpg
     photo: "https://i.pinimg.com/vwebp/1200x/6c/3d/c9/6c3dc93daf97605977481f0215e01233.webp",
     parentsLine: "Son of Mr. Ravi & Mrs. Padma Varma",
   },
-  // Displayed as monogram in nav, loading, footer
   coupleMonogramText: "V & V",
 };
 
 // ─── Hero Section ────────────────────────────────────────────────────────────
-// Replace with a beautiful couple photo:  public/images/hero.jpg
 export const heroImage = "https://i.pinimg.com/vwebp/736x/85/9d/cd/859dcdf4a25b8788a5e79780fb7bedbf.webp";
 
 // ─── Date & Venue ────────────────────────────────────────────────────────────
@@ -77,7 +65,6 @@ export const events = [
 ];
 
 // ─── Gallery ─────────────────────────────────────────────────────────────────
-// Replace each src with your photo:  public/images/gallery-1.jpg  etc.
 export const gallery = [
   { id: 1, src: "https://i.pinimg.com/736x/7a/e9/72/7ae972372d17b33f43fe618105379a08.jpg", tall: true },
   { id: 2, src: "https://i.pinimg.com/vwebp/736x/c4/74/ad/c474ad18ac47fe387677707d767b0a60.webp", tall: false },
@@ -88,7 +75,6 @@ export const gallery = [
 ];
 
 // ─── Music ───────────────────────────────────────────────────────────────────
-// Replace src with your own audio files in  public/audio/
 export const playlist = [
   {
     title: "Veena Dreams",
