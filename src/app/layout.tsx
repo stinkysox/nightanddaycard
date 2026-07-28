@@ -48,40 +48,71 @@ const dmSerif = DM_Serif_Display({
   display: "swap",
 });
 
-// Comprehensive SEO and Social Sharing Metadata with hardcoded domain
+/* ============================================================
+   SEO CONFIG
+   Change these values for each new client
+============================================================ */
+
+const WEBSITE_URL = "https://vinayvigna.vercel.app";
+
+// OPTION 1 (Recommended):
+// Put og-image.jpg inside /public and leave this unchanged.
+const OG_IMAGE = "https://i.pinimg.com/736x/e0/49/36/e049364e32629c634e8230cb93e5f4fd.jpg";
+
+// OPTION 2:
+// If using an external image, comment the line above and use:
+// const OG_IMAGE = "https://your-cdn.com/og-image.jpg";
+
+/* ============================================================
+   Metadata
+============================================================ */
+
 export const metadata: Metadata = {
-  metadataBase: new URL("https://www.yourweddingdomain.com"),
-  
+  metadataBase: new URL(WEBSITE_URL),
+
   title: {
     default: siteMeta.title,
     template: `%s | ${siteMeta.title}`,
   },
+
   description: siteMeta.description,
-  
-  keywords: ["Wedding Invitation", "Our Wedding", siteMeta.title, "Save The Date"],
-  
+
+  keywords: [
+    "Wedding Invitation",
+    "Wedding Website",
+    "Luxury Wedding",
+    "Digital Invitation",
+    "Save The Date",
+    siteMeta.title,
+  ],
+
+  alternates: {
+    canonical: WEBSITE_URL,
+  },
+
   openGraph: {
     title: siteMeta.title,
     description: siteMeta.description,
-    url: "https://www.yourweddingdomain.com",
+    url: WEBSITE_URL,
     siteName: siteMeta.title,
+    type: "website",
+    locale: "en_US",
+
     images: [
       {
-        url: "/og-image.jpg",
+        url: OG_IMAGE,
         width: 1200,
         height: 630,
-        alt: siteMeta.title,
+        alt: `${siteMeta.title} | Wedding Invitation`,
       },
     ],
-    locale: "en_US",
-    type: "website",
   },
 
   twitter: {
     card: "summary_large_image",
     title: siteMeta.title,
     description: siteMeta.description,
-    images: ["/og-image.jpg"],
+    images: [OG_IMAGE],
   },
 
   robots: {
@@ -90,9 +121,9 @@ export const metadata: Metadata = {
     googleBot: {
       index: true,
       follow: true,
-      "max-video-preview": -1,
       "max-image-preview": "large",
       "max-snippet": -1,
+      "max-video-preview": -1,
     },
   },
 };
@@ -110,7 +141,7 @@ export default function RootLayout({
         <script
           dangerouslySetInnerHTML={{
             __html: `
-              (function() {
+              (function () {
                 try {
                   const stored = localStorage.getItem("wedding-theme");
                   const theme = stored === "light" ? "light" : "dark";
@@ -123,6 +154,7 @@ export default function RootLayout({
           }}
         />
       </head>
+
       <body className="font-body antialiased">
         <Providers>{children}</Providers>
       </body>

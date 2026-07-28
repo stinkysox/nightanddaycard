@@ -9,42 +9,23 @@ import {
   thankYouMessage,
 } from "@/data/weddingData";
 
-const WAX_DRIPS = [
-  { side: "left" as const, top: 24, width: 6, height: 18 },
-  { side: "right" as const, top: 38, width: 5, height: 14 },
-];
-
 function Candle() {
   return (
-    <div
-      className="relative w-[24px] h-[100px] mx-auto mb-10"
-      aria-hidden="true"
-    >
-      {/* Ambient Glow */}
-      <div className="absolute left-1/2 top-[0px] w-[80px] h-[80px] -translate-x-1/2 -translate-y-1/2 bg-[radial-gradient(circle,rgba(255,200,100,0.5)_0%,rgba(255,150,50,0.1)_50%,transparent_70%)] blur-[8px] pointer-events-none animate-[ty-glow-pulse_3s_ease-in-out_infinite] motion-reduce:animate-none" />
+    <div className="relative w-[16px] h-[56px] mx-auto mb-6" aria-hidden="true">
+      {/* Ambient Glow — softer, smaller radius */}
+      <div className="absolute left-1/2 top-0 w-[46px] h-[46px] -translate-x-1/2 -translate-y-1/2 bg-[radial-gradient(circle,rgba(255,200,100,0.35)_0%,rgba(255,150,50,0.08)_50%,transparent_70%)] blur-[6px] pointer-events-none animate-[ty-glow-pulse_3s_ease-in-out_infinite] motion-reduce:animate-none" />
 
       {/* Flame */}
-      <div className="absolute left-1/2 top-[-16px] w-[14px] h-[28px] -translate-x-1/2 rounded-[50%_50%_50%_50%/60%_60%_40%_40%] bg-[radial-gradient(ellipse_at_50%_80%,#fffaf0_0%,#ffd770_35%,#f99d45_65%,#e65c19_100%)] shadow-[0_0_16px_4px_rgba(255,180,80,0.4)] origin-[50%_100%] animate-[ty-flicker_2.6s_ease-in-out_infinite] motion-reduce:animate-none" />
+      <div className="absolute left-1/2 top-[-11px] w-[9px] h-[18px] -translate-x-1/2 rounded-[50%_50%_50%_50%/60%_60%_40%_40%] bg-[radial-gradient(ellipse_at_50%_80%,#fffaf0_0%,#ffd770_35%,#f99d45_65%,#e65c19_100%)] shadow-[0_0_10px_2px_rgba(255,180,80,0.3)] origin-[50%_100%] animate-[ty-flicker_2.6s_ease-in-out_infinite] motion-reduce:animate-none" />
 
       {/* Wick */}
-      <div className="absolute left-1/2 top-[8px] w-[2px] h-[10px] -translate-x-1/2 bg-[#2a221c] rounded-full" />
+      <div className="absolute left-1/2 top-[5px] w-[1.5px] h-[7px] -translate-x-1/2 bg-[#2a221c] rounded-full" />
 
       {/* Candle Body */}
-      <div className="absolute left-1/2 bottom-0 w-[24px] h-[84px] -translate-x-1/2 rounded-t-sm bg-gradient-to-b from-stone-100 to-stone-300 shadow-[inset_-3px_0_6px_rgba(0,0,0,0.06),inset_2px_0_4px_rgba(255,255,255,0.4),0_4px_10px_rgba(0,0,0,0.1)]" />
-
-      {/* Wax Drips */}
-      {WAX_DRIPS.map((drip) => (
-        <div
-          key={drip.side}
-          className={`absolute rounded-b-full bg-gradient-to-b from-stone-100 to-stone-200 ${
-            drip.side === "left" ? "left-[3px]" : "right-[2px]"
-          }`}
-          style={{ top: drip.top, width: drip.width, height: drip.height }}
-        />
-      ))}
+      <div className="absolute left-1/2 bottom-0 w-[16px] h-[46px] -translate-x-1/2 rounded-t-sm bg-gradient-to-b from-stone-100 to-stone-300 shadow-[inset_-2px_0_4px_rgba(0,0,0,0.06),inset_1.5px_0_3px_rgba(255,255,255,0.4),0_3px_8px_rgba(0,0,0,0.08)]" />
 
       {/* Base Shadow */}
-      <div className="absolute left-1/2 bottom-[-4px] w-[50px] h-[8px] -translate-x-1/2 rounded-full bg-[radial-gradient(ellipse_at_center,var(--accent)_0%,transparent_70%)] opacity-20" />
+      <div className="absolute left-1/2 bottom-[-3px] w-[32px] h-[6px] -translate-x-1/2 rounded-full bg-[radial-gradient(ellipse_at_center,var(--accent)_0%,transparent_70%)] opacity-15" />
     </div>
   );
 }
@@ -77,7 +58,7 @@ export default function ThankYouSection() {
           grid-template-rows: 0fr;
           transition: grid-template-rows 1s cubic-bezier(0.25, 1, 0.3, 1) 0.2s;
           width: 100%;
-          max-width: 36rem;
+          max-width: 34rem;
         }
         .ty-letter-grid.is-open {
           grid-template-rows: 1fr;
@@ -88,9 +69,9 @@ export default function ThankYouSection() {
 
         /* The padding sits INSIDE the hidden area to prevent layout jumps */
         .ty-letter-content {
-          padding-top: 3rem;
+          padding-top: 2.5rem;
           opacity: 0;
-          transform: translateY(24px);
+          transform: translateY(18px);
           transition: opacity 0.8s ease 0.6s, transform 0.8s cubic-bezier(0.25, 1, 0.3, 1) 0.6s;
         }
         .ty-letter-grid.is-open .ty-letter-content {
@@ -199,43 +180,43 @@ export default function ThankYouSection() {
       >
         <div className="ty-letter-inner">
           <div className="ty-letter-content">
-            {/* 1. Letter / Header Comes First */}
-            <span className="block uppercase tracking-[0.25em] text-[11px] font-semibold text-accent/80 mb-6">
-              With Love
-            </span>
+            {/* Soft paper card — gives the letter its own quiet surface instead of floating text */}
+            <div className="relative rounded-2xl border border-black/5 dark:border-white/10 bg-white/50 dark:bg-white/[0.03] backdrop-blur-sm shadow-[0_20px_50px_-25px_rgba(0,0,0,0.25)] px-6 py-10 md:px-12 md:py-14">
+              <span className="block uppercase tracking-[0.25em] text-[10px] font-medium text-accent/70 mb-5">
+                With Love
+              </span>
 
-            {/* 2. Then Comes the Candle */}
-            <Candle />
+              <Candle />
 
-            {/* 3. Then Comes the Thank You Section */}
-            <h2 className="font-serif italic text-5xl md:text-[4.2rem] leading-[1.1] text-text-primary tracking-tight mb-8">
-              Thank You
-            </h2>
+              <h2 className="font-serif italic text-[34px] md:text-[42px] leading-[1.15] text-text-primary tracking-tight mb-5">
+                Thank You
+              </h2>
 
-            {/* Delicate Divider */}
-            <div className="w-24 h-[1px] mx-auto bg-gradient-to-r from-transparent via-accent/40 to-transparent mb-8" />
+              {/* Delicate Divider */}
+              <div className="w-14 h-[1px] mx-auto bg-gradient-to-r from-transparent via-accent/35 to-transparent mb-7" />
 
-            {/* Message body */}
-            <p className="font-body text-[16px] md:text-[18px] leading-[1.8] text-text-secondary max-w-xl mx-auto font-light">
-              {thankYouMessage}
-            </p>
-
-            {/* Beautiful Monogram Conclusion */}
-            <p className="font-script text-[56px] md:text-[64px] text-accent opacity-90 mt-10 mb-16 leading-none">
-              {couple.coupleMonogramText}
-            </p>
-
-            {/* Hosted By Block */}
-            <div className="pt-10 border-t border-stone-200 dark:border-stone-800/60 max-w-md mx-auto">
-              <p className="font-body text-[13px] uppercase tracking-widest text-muted mb-3">
-                {invitedBy.line}
+              {/* Message body */}
+              <p className="font-body text-[15px] md:text-[16px] leading-[1.85] text-text-secondary max-w-md mx-auto font-light">
+                {thankYouMessage}
               </p>
-              <p className="font-serif text-[22px] md:text-[24px] text-text-primary font-medium tracking-wide">
-                {invitedBy.hosts}
+
+              {/* Monogram Conclusion — smaller, quieter */}
+              <p className="font-script text-[34px] md:text-[38px] text-accent/80 mt-7 mb-10 leading-none">
+                {couple.coupleMonogramText}
               </p>
-              <p className="font-body text-[14px] text-muted font-light mt-3">
-                {invitedBy.subline}
-              </p>
+
+              {/* Hosted By Block */}
+              <div className="pt-7 border-t border-black/5 dark:border-white/10 max-w-sm mx-auto">
+                <p className="font-body text-[11px] uppercase tracking-widest text-muted mb-2">
+                  {invitedBy.line}
+                </p>
+                <p className="font-serif text-[18px] md:text-[19px] text-text-primary font-medium tracking-wide">
+                  {invitedBy.hosts}
+                </p>
+                <p className="font-body text-[13px] text-muted font-light mt-2">
+                  {invitedBy.subline}
+                </p>
+              </div>
             </div>
           </div>
         </div>

@@ -11,8 +11,8 @@ import MeetTheCouple from "@/components/sections/MeetTheCouple";
 import GallerySection from "@/components/sections/GallerySection";
 import WeddingEvents from "@/components/sections/WeddingEvents";
 import RsvpSection from "@/components/sections/RsvpSection";
-import GuestbookSection from "@/components/sections/GuestbookSection";
 import ThankYouSection, { Footer } from "@/components/sections/ThankYouSection";
+import FairyLightDivider from "@/components/FairyLightDivider";
 
 export default function Home() {
   const [envelopeOpened, setEnvelopeOpened] = useState(false);
@@ -27,12 +27,20 @@ export default function Home() {
           <Navbar />
           <main className="relative overflow-x-clip w-full">
             <Hero />
+            <FairyLightDivider />
             <MusicPlayer />
+            <FairyLightDivider />
             <MeetTheCouple />
+            <FairyLightDivider />
             <GallerySection />
+            <FairyLightDivider />
             <WeddingEvents />
+            <FairyLightDivider />
             <RsvpSection />
+            <FairyLightDivider />
             <ThankYouSection />
+                        <FairyLightDivider />
+
             <Footer />
           </main>
         </>

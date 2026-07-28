@@ -13,14 +13,7 @@ export default function Hero() {
     >
       {/* ── Background Image ── */}
       <div className="absolute inset-0">
-        <Image
-          src={heroImage}
-          alt={`${couple.groom.firstName} & ${couple.bride.firstName}`}
-          fill
-          className="object-cover"
-          sizes="100vw"
-          priority
-        />
+      
         {/* Dark overlay for text legibility */}
         <div
           className="absolute inset-0"
@@ -77,7 +70,7 @@ export default function Hero() {
         >
           Save the Date
         </p>
-        
+
         <DateScratchCard />
 
         <p
