@@ -53,11 +53,10 @@ const dmSerif = DM_Serif_Display({
    Change these values for each new client
 ============================================================ */
 
-const WEBSITE_URL = "https://www.vinayvigna.vercel.app";
-
+const WEBSITE_URL = "https://vinayvigna.vercel.app";
 // OPTION 1 (Recommended):
 // Put og-image.jpg inside /public and leave this unchanged.
-const OG_IMAGE = "https://i.pinimg.com/736x/d1/5e/53/d15e53dd62b390fcfab58b0adb1a62c2.jpg";
+const OG_IMAGE = "https://i.pinimg.com/1200x/33/62/66/336266c72bd8e8023bd7bdbca437372f.jpg";
 
 // OPTION 2:
 // If using an external image, comment the line above and use:
