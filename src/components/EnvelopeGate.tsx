@@ -1,301 +1,336 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { couple } from "@/data/weddingData";
+import { useTheme } from "./ThemeProvider";
+import ThemeToggle from "./ThemeToggle";
+
+const EASE = [0.22, 1, 0.36, 1] as const;
+
+// The V-shaped opening at the top of the envelope front
+const FRONT_CLIP = "polygon(0 0, 50% 54%, 100% 0, 100% 100%, 0 100%)";
+const FLAP_CLIP = "polygon(0 0, 100% 0, 50% 100%)";
 
 export default function EnvelopeGate({ onOpen }: { onOpen: () => void }) {
-  const [stage, setStage] = useState<"closed" | "opening" | "opened">("closed");
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
+  const reduce = useReducedMotion();
+  const [visible, setVisible] = useState(true);
+  const [stage, setStage] = useState<"closed" | "opening">("closed");
+  const [flapBehind, setFlapBehind] = useState(false);
   const sealRef = useRef<HTMLButtonElement>(null);
+  const timers = useRef<number[]>([]);
 
-  // Lock body scrolling while gate is active
+  // Lock scrolling while the gate is visible, unlock as soon as opened
   useEffect(() => {
-    document.body.style.overflow = stage === "opened" ? "unset" : "hidden";
+    if (visible) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
     return () => {
-      document.body.style.overflow = "unset";
+      document.body.style.overflow = "";
     };
-  }, [stage]);
+  }, [visible]);
 
   useEffect(() => {
     sealRef.current?.focus();
+    return () => timers.current.forEach(window.clearTimeout);
   }, []);
+
+  const later = (fn: () => void, ms: number) => {
+    timers.current.push(window.setTimeout(fn, ms));
+  };
 
   const handleOpen = () => {
     if (stage !== "closed") return;
     setStage("opening");
 
-    setTimeout(() => {
-      setStage("opened");
-      onOpen();
-    }, 1300);
+    if (reduce) {
+      later(() => {
+        document.body.style.overflow = "";
+        setVisible(false);
+        onOpen();
+      }, 250);
+      return;
+    }
+
+    later(() => setFlapBehind(true), 380); // flap passes behind the card
+    later(() => {
+      document.body.style.overflow = "";
+      setVisible(false); // gate fades out…
+      onOpen(); // …revealing the site underneath
+    }, 1900);
   };
 
-  if (stage === "opened") return null;
+  const opening = stage === "opening";
 
   return (
     <AnimatePresence>
-      <motion.div
-        role="dialog"
-        aria-modal="true"
-        aria-label="Wedding invitation gate"
-        className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 overflow-hidden select-none"
-        style={{
-          background:
-            "radial-gradient(120% 100% at 50% 0%, #0f172a 0%, #020617 100%)",
-        }}
-        initial={{ opacity: 1 }}
-        exit={{ opacity: 0, scale: 1.03, filter: "blur(10px)" }}
-        transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-      >
-        {/* Subtle Ambient Grain Texture */}
-        <div
-          className="absolute inset-0 opacity-[0.03] pointer-events-none mix-blend-overlay"
+      {visible && (
+        <motion.div
+          role="dialog"
+          aria-modal="true"
+          aria-label="Wedding invitation"
+          className="fixed inset-0 z-[100] flex select-none items-center justify-center overflow-hidden p-6 transition-colors duration-700"
           style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`,
+            background: isDark
+              ? "radial-gradient(ellipse 90% 80% at 50% 45%, rgba(9, 12, 27, 0.42) 0%, rgba(9, 12, 27, 0.82) 100%)"
+              : "radial-gradient(ellipse 90% 80% at 50% 45%, rgba(242, 233, 218, 0.42) 0%, rgba(236, 224, 204, 0.82) 100%)",
+            backdropFilter: "blur(2px)",
+            WebkitBackdropFilter: "blur(2px)",
           }}
-        />
-
-        {/* ── ELEGANT MICRO-LED FAIRY LIGHTS STRING (TOP) ── */}
-        <div className="absolute top-0 inset-x-0 h-32 pointer-events-none z-40 overflow-hidden flex justify-center">
-          <style>{`
-            @keyframes fairy-twinkle {
-              0%, 100% { opacity: 0.25; transform: scale(0.7); filter: drop-shadow(0 0 3px rgba(255, 235, 180, 0.3)); }
-              50% { opacity: 0.95; transform: scale(1.1); filter: drop-shadow(0 0 8px rgba(255, 243, 205, 0.8)); }
-            }
-            @keyframes fairy-sway {
-              0%, 100% { transform: translateY(0px) rotate(0deg); }
-              50% { transform: translateY(2px) rotate(0.3deg); }
-            }
-          `}</style>
-
-          {/* Ultra-Fine Hanging Wire Curve */}
-          <svg
-            className="absolute top-0 w-full max-w-5xl h-20 text-amber-100/15"
-            viewBox="0 0 1000 120"
-            fill="none"
-            preserveAspectRatio="none"
-          >
-            <path
-              d="M0,0 Q250,85 500,85 Q750,85 1000,0"
-              stroke="currentColor"
-              strokeWidth="0.75"
-              fill="none"
-            />
-          </svg>
-
-          {/* Delicate Glowing Micro-Bulbs Container */}
-          <div className="absolute top-0 w-full max-w-4xl h-24 flex justify-between px-6 sm:px-12 animate-[fairy-sway_7s_ease-in-out_infinite]">
-            {[
-              { left: "4%", delay: "0.2s", duration: "2.6s" },
-              { left: "12%", delay: "1.1s", duration: "2.1s" },
-              { left: "20%", delay: "0.5s", duration: "3.2s" },
-              { left: "28%", delay: "1.8s", duration: "2.4s" },
-              { left: "36%", delay: "0.8s", duration: "2.9s" },
-              { left: "44%", delay: "0.1s", duration: "2.2s" },
-              { left: "52%", delay: "1.4s", duration: "2.7s" },
-              { left: "60%", delay: "0.6s", duration: "2.0s" },
-              { left: "68%", delay: "1.2s", duration: "3.0s" },
-              { left: "76%", delay: "0.3s", duration: "2.5s" },
-              { left: "84%", delay: "1.6s", duration: "2.3s" },
-              { left: "92%", delay: "0.9s", duration: "2.8s" },
-              { left: "98%", delay: "0.4s", duration: "2.1s" },
-            ].map((bulb, i) => (
-              <div
-                key={i}
-                className="absolute flex flex-col items-center"
-                style={{ left: bulb.left }}
-              >
-                {/* Ultra-thin wire drop */}
-                <div className="w-[0.5px] h-3 sm:h-4 bg-amber-100/20" />
-                
-                {/* Soft Micro-LED Glow Dot */}
-                <div
-                  className="w-1.5 h-2 sm:w-2 sm:h-2.5 rounded-full bg-gradient-to-t from-amber-200 via-amber-100 to-white shadow-[0_0_8px_2px_rgba(255,240,200,0.6)]"
-                  style={{
-                    animation: `fairy-twinkle ${bulb.duration} ease-in-out infinite`,
-                    animationDelay: bulb.delay,
-                  }}
-                />
-              </div>
-            ))}
+          initial={{ opacity: 1 }}
+          exit={{ opacity: 0, filter: "blur(8px)" }}
+          transition={{ duration: 0.7, ease: EASE }}
+        >
+          {/* Theme switcher */}
+          <div className="absolute top-5 right-5 z-50">
+            <ThemeToggle />
           </div>
-        </div>
 
-        {/* ── ENVELOPE CONTAINER ── */}
-        <div className="relative w-full max-w-[340px] xs:max-w-[380px] sm:max-w-[430px] aspect-[4/3] flex items-center justify-center mt-6">
-          {/* Subtle Ambient Shadow Under Envelope */}
-          <div className="absolute -bottom-6 w-[88%] h-8 bg-black/80 blur-xl rounded-full pointer-events-none" />
-
-          {/* Main Envelope Body */}
+          {/* Ambient light pooling behind the envelope */}
           <div
-            className="relative w-full h-full rounded-[3px] overflow-visible border border-slate-700/40"
+            aria-hidden
+            className="pointer-events-none absolute left-1/2 top-1/2 h-[70vmin] w-[70vmin] -translate-x-1/2 -translate-y-1/2 rounded-full transition-all duration-700"
             style={{
-              background: "linear-gradient(145deg, #1e293b 0%, #0f172a 100%)",
-              boxShadow:
-                "0 25px 50px -12px rgba(0, 0, 0, 0.75), inset 0 1px 0 rgba(255, 255, 255, 0.1)",
+              background: isDark
+                ? "radial-gradient(closest-side, rgba(201, 168, 108, 0.2), rgba(201, 168, 108, 0))"
+                : "radial-gradient(closest-side, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0))",
             }}
+          />
+
+          {/* Envelope group */}
+          <motion.div
+            className="relative aspect-[10/7] w-[min(88vw,440px)]"
+            style={{ perspective: 1400 }}
+            animate={{ y: opening && !reduce ? "16%" : "0%" }}
+            transition={{ duration: 1.1, delay: 0.3, ease: EASE }}
           >
-            {/* ── INVITATION CARD (SLIDES UP OUT OF ENVELOPE) ── */}
-            <motion.div
-              className="absolute inset-x-3.5 top-3.5 bottom-3.5 rounded-[2px] bg-[#fcfbf9] p-6 text-neutral-900 flex flex-col justify-between items-center text-center border border-[#e2d9cc]"
+            {/* Ground shadow */}
+            <div
+              aria-hidden
+              className={`absolute -bottom-7 left-[6%] h-8 w-[88%] rounded-[50%] blur-xl transition-colors duration-700 ${
+                isDark ? "bg-[#04060f]/60" : "bg-[#3d2b18]/25"
+              }`}
+            />
+
+            {/* Back panel (inside of the envelope) */}
+            <div
+              className="absolute inset-0 rounded-[10px] transition-all duration-700"
               style={{
-                boxShadow: "0 12px 35px rgba(0,0,0,0.35)",
+                background: isDark
+                  ? "linear-gradient(180deg, #090c1b 0%, #141935 100%)"
+                  : "linear-gradient(180deg, #3d2414 0%, #4d2f1b 100%)",
+                border: isDark
+                  ? "1px solid rgba(201, 168, 108, 0.22)"
+                  : "1px solid rgba(212, 175, 55, 0.25)",
+                zIndex: 0,
               }}
-              initial={{ y: 0, scale: 0.97 }}
-              animate={
-                stage === "opening"
-                  ? { y: "-58%", scale: 1, zIndex: 30 }
-                  : { y: 0, scale: 0.97 }
-              }
-              transition={{
-                duration: 0.85,
-                delay: 0.35,
-                ease: [0.16, 1, 0.3, 1],
+            />
+
+            {/* Invitation card */}
+            <motion.div
+              className="absolute inset-x-[5%] bottom-[5%] top-[7%] flex flex-col items-center justify-between rounded-[6px] bg-[#fbf9f4] px-6 py-7 text-center transition-colors duration-700"
+              style={{
+                zIndex: 10,
+                boxShadow: isDark
+                  ? "0 1px 0 rgba(255,255,255,0.9) inset, 0 10px 30px -8px rgba(0,0,0,0.65)"
+                  : "0 1px 0 rgba(255,255,255,0.85) inset, 0 10px 30px -8px rgba(40,25,12,0.35)",
               }}
+              initial={{ y: 0 }}
+              animate={{ y: opening && !reduce ? "-64%" : 0 }}
+              transition={{ duration: 1, delay: 0.5, ease: EASE }}
             >
-              {/* Gold Trim Inner Border */}
-              <div className="absolute inset-2 border border-[#d4af37]/40 pointer-events-none rounded-[1px]" />
+              <div
+                aria-hidden
+                className="pointer-events-none absolute inset-2 rounded-[3px] border border-[#c9a86c]/30"
+              />
 
-              <span className="text-[9px] font-semibold tracking-[0.35em] uppercase text-[#b8860b] mt-1">
-                You Are Invited
+              <span
+                className="flex h-9 w-9 items-center justify-center rounded-full border border-[#c9a86c]/50 text-[13px] text-[#9a7838]"
+                style={{
+                  fontFamily:
+                    "var(--font-display, 'Cormorant Garamond', Georgia, serif)",
+                }}
+              >
+                {couple.coupleMonogramText}
               </span>
 
-              <div className="my-auto py-2">
-                <h2 className="font-serif italic text-2xl sm:text-3xl text-slate-900 leading-tight">
+              <h2
+                style={{
+                  fontFamily:
+                    "var(--font-display, 'Cormorant Garamond', Georgia, serif)",
+                }}
+              >
+                <span className="block text-[clamp(30px,8.5vw,44px)] font-light leading-[1.05] tracking-tight text-[#151a30]">
                   {couple.groom.firstName}
-                  <span className="text-xs font-sans not-italic block my-1 uppercase tracking-widest text-[#b8860b]">
-                    &amp;
-                  </span>
+                </span>
+                <span className="my-1 block text-lg font-light italic text-[#9a7838]">
+                  and
+                </span>
+                <span className="block text-[clamp(30px,8.5vw,44px)] font-light leading-[1.05] tracking-tight text-[#151a30]">
                   {couple.bride.firstName}
-                </h2>
-              </div>
+                </span>
+              </h2>
 
-              <span className="text-[10px] tracking-[0.2em] uppercase text-slate-400 mb-1">
-                Open Invitation
-              </span>
+              <p className="text-[12px] tracking-wide text-[#151a30]/65 font-medium">
+                Request the pleasure of your company
+              </p>
             </motion.div>
 
-            {/* Envelope Pocket Flaps (Overlays) */}
-            <div className="absolute inset-0 pointer-events-none z-20 overflow-hidden rounded-[3px]">
-              {/* Left Pocket Flap */}
+            {/* Front pocket */}
+            <div
+              className="pointer-events-none absolute inset-0 transition-all duration-700"
+              style={{
+                zIndex: 20,
+                clipPath: FRONT_CLIP,
+                background: isDark
+                  ? "linear-gradient(180deg, #1e254e 0%, #151a38 60%, #0d1127 100%)"
+                  : "linear-gradient(180deg, #5c381f 0%, #482a15 60%, #381f0d 100%)",
+                borderRadius: 10,
+                boxShadow: isDark
+                  ? "inset 0 1px 0 rgba(201,168,108,0.25)"
+                  : "inset 0 1px 0 rgba(255,255,255,0.25)",
+              }}
+            >
+              {/* Fold seams */}
+              <svg
+                aria-hidden
+                className="absolute inset-0 h-full w-full"
+                viewBox="0 0 100 70"
+                preserveAspectRatio="none"
+              >
+                <path
+                  d="M0 70 L50 37.8 L100 70"
+                  fill="none"
+                  stroke={isDark ? "rgba(201, 168, 108, 0.25)" : "rgba(255, 255, 255, 0.18)"}
+                  strokeWidth="0.35"
+                  vectorEffect="non-scaling-stroke"
+                />
+              </svg>
               <div
-                className="absolute left-0 bottom-0 top-0 w-1/2 border-r border-slate-700/30"
+                className="absolute inset-x-0 bottom-0 h-1/2"
                 style={{
                   background:
-                    "linear-gradient(105deg, #1b2536 0%, #0d1527 100%)",
-                  clipPath: "polygon(0 0, 100% 50%, 0 100%)",
-                  boxShadow: "4px 0 14px rgba(2, 6, 23, 0.5)",
-                }}
-              />
-              {/* Right Pocket Flap */}
-              <div
-                className="absolute right-0 bottom-0 top-0 w-1/2 border-l border-slate-700/30"
-                style={{
-                  background:
-                    "linear-gradient(-105deg, #1e293b 0%, #0e1726 100%)",
-                  clipPath: "polygon(100% 0, 0 50%, 100% 100%)",
-                  boxShadow: "-4px 0 14px rgba(2, 6, 23, 0.5)",
-                }}
-              />
-              {/* Bottom Pocket Flap */}
-              <div
-                className="absolute bottom-0 inset-x-0 h-1/2 border-t border-slate-700/30"
-                style={{
-                  background: "linear-gradient(0deg, #090d16 0%, #172030 100%)",
-                  clipPath: "polygon(0 100%, 50% 0, 100% 100%)",
-                  boxShadow: "0 -4px 16px rgba(2, 6, 23, 0.6)",
+                    "linear-gradient(0deg, rgba(0,0,0,0.25), rgba(0,0,0,0))",
                 }}
               />
             </div>
 
-            {/* ── TOP ENVELOPE FLAP (3D OPENING) ── */}
+            {/* Top flap (two faces so the inside shows once open) */}
             <motion.div
-              className="absolute top-0 inset-x-0 h-1/2 origin-top z-25 pointer-events-none border-b border-slate-600/40"
+              className="pointer-events-none absolute inset-x-0 top-0 h-[54%]"
               style={{
-                background: "linear-gradient(180deg, #243248 0%, #172030 100%)",
-                clipPath: "polygon(0 0, 100% 0, 50% 100%)",
-                backfaceVisibility: "hidden",
+                transformOrigin: "top",
+                transformStyle: "preserve-3d",
+                zIndex: flapBehind ? 5 : 30,
               }}
               initial={{ rotateX: 0 }}
-              animate={
-                stage === "opening"
-                  ? { rotateX: -180, zIndex: 10 }
-                  : { rotateX: 0 }
-              }
-              transition={{
-                duration: 0.7,
-                delay: 0.1,
-                ease: [0.4, 0, 0.2, 1],
-              }}
+              animate={{ rotateX: opening && !reduce ? -180 : 0 }}
+              transition={{ duration: 0.75, delay: 0.1, ease: [0.45, 0, 0.2, 1] }}
             >
-              <div className="absolute inset-x-0 top-0 h-[1px] bg-white/10" />
+              {/* Outside */}
+              <div
+                className="absolute inset-0 transition-all duration-700"
+                style={{
+                  clipPath: FLAP_CLIP,
+                  backfaceVisibility: "hidden",
+                  WebkitBackfaceVisibility: "hidden",
+                  background: isDark
+                    ? "linear-gradient(180deg, #252e61 0%, #181d3f 100%)"
+                    : "linear-gradient(180deg, #6c4226 0%, #502e17 100%)",
+                }}
+              />
+              {/* Inside */}
+              <div
+                className="absolute inset-0 transition-all duration-700"
+                style={{
+                  clipPath: FLAP_CLIP,
+                  backfaceVisibility: "hidden",
+                  WebkitBackfaceVisibility: "hidden",
+                  transform: "rotateX(180deg)",
+                  background: isDark
+                    ? "linear-gradient(0deg, #0a0d1f 0%, #141937 100%)"
+                    : "linear-gradient(0deg, #2e180a 0%, #422410 100%)",
+                }}
+              />
             </motion.div>
 
-            {/* ── GOLD WAX SEAL BUTTON ── */}
-            <div className="absolute inset-0 flex items-center justify-center z-30">
+            {/* Wax seal */}
+            <div
+              className="absolute left-1/2 flex -translate-x-1/2 -translate-y-1/2 items-center justify-center"
+              style={{ top: "54%", zIndex: 40 }}
+            >
               <AnimatePresence>
                 {stage === "closed" && (
                   <motion.button
                     ref={sealRef}
                     type="button"
                     onClick={handleOpen}
-                    className="group relative w-16 h-16 sm:w-20 sm:h-20 rounded-full flex items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-[#eab308] cursor-pointer"
-                    initial={{ scale: 0.9, opacity: 0 }}
+                    aria-label="Open the wedding invitation"
+                    className="group relative flex h-[68px] w-[68px] cursor-pointer items-center justify-center rounded-full outline-none sm:h-20 sm:w-20"
+                    initial={{ scale: 0.85, opacity: 0 }}
                     animate={{ scale: 1, opacity: 1 }}
-                    exit={{ scale: 0.75, opacity: 0 }}
-                    whileHover={{ scale: 1.06 }}
-                    whileTap={{ scale: 0.94 }}
-                    transition={{ type: "spring", stiffness: 350, damping: 22 }}
-                    aria-label="Break seal to open wedding invitation"
+                    exit={{ scale: 0.8, opacity: 0, y: 6 }}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    transition={{ type: "spring", stiffness: 380, damping: 26 }}
                   >
-                    {/* Metallic Glow */}
-                    <div className="absolute -inset-2 rounded-full bg-gradient-to-r from-[#d4af37]/40 via-[#fef08a]/20 to-[#d4af37]/40 blur-md group-hover:opacity-100 opacity-60 transition-opacity" />
+                    {/* Pulse ring */}
+                    {!reduce && (
+                      <span
+                        aria-hidden
+                        className="absolute inset-0 animate-ping rounded-full bg-[#d4af37]/40 [animation-duration:2.6s]"
+                      />
+                    )}
 
-                    {/* Wax Stamp Body */}
-                    <div
-                      className="absolute inset-0 rounded-full flex items-center justify-center overflow-hidden"
+                    {/* Seal body */}
+                    <span
+                      className="absolute inset-0 rounded-full group-focus-visible:ring-2 group-focus-visible:ring-[#d4af37] group-focus-visible:ring-offset-2"
                       style={{
                         background:
-                          "radial-gradient(circle at 35% 30%, #facc15 0%, #ca8a04 55%, #854d0e 100%)",
-                        boxShadow:
-                          "0 10px 25px rgba(0,0,0,0.65), inset 0 2px 3px rgba(255,255,255,0.5), inset 0 -3px 6px rgba(0,0,0,0.5)",
+                          "radial-gradient(circle at 32% 28%, #fae8be 0%, #d4af37 50%, #997523 100%)",
+                        boxShadow: isDark
+                          ? "0 8px 24px -4px rgba(0,0,0,0.7), 0 0 16px rgba(212,175,55,0.35), inset 0 1.5px 1px rgba(255,255,255,0.6), inset 0 -2px 4px rgba(90,70,20,0.5)"
+                          : "0 8px 20px -4px rgba(60,35,15,0.45), 0 0 14px rgba(212,175,55,0.25), inset 0 1.5px 1px rgba(255,255,255,0.7), inset 0 -2px 4px rgba(90,70,20,0.4)",
+                      }}
+                    />
+                    <span
+                      aria-hidden
+                      className="absolute inset-[6px] rounded-full border border-[#785717]/30"
+                    />
+                    <span
+                      className="relative text-lg font-medium text-[#2d1f07] sm:text-xl"
+                      style={{
+                        fontFamily:
+                          "var(--font-display, 'Cormorant Garamond', Georgia, serif)",
                       }}
                     >
-                      {/* Inner Stamped Rim */}
-                      <div className="absolute inset-1.5 rounded-full border border-[#fef9c3]/40 pointer-events-none" />
-
-                      {/* Monogram */}
-                      <span
-                        className="font-serif italic text-white text-lg sm:text-xl font-bold tracking-tighter select-none"
-                        style={{
-                          textShadow: "0 1px 3px rgba(0,0,0,0.8)",
-                        }}
-                      >
-                        {couple.coupleMonogramText}
-                      </span>
-                    </div>
-
-                    {/* Light Sheen Sweep */}
-                    <div className="absolute inset-0 rounded-full overflow-hidden pointer-events-none">
-                      <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/25 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out" />
-                    </div>
+                      {couple.coupleMonogramText}
+                    </span>
                   </motion.button>
                 )}
               </AnimatePresence>
             </div>
-          </div>
-        </div>
+          </motion.div>
 
-        {/* Floating Hint Text */}
-        <motion.p
-          className="absolute bottom-8 left-0 right-0 text-center text-[11px] font-serif italic text-slate-300/80 tracking-widest uppercase pointer-events-none"
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: stage === "closed" ? 1 : 0, y: 0 }}
-          transition={{ delay: 0.5, duration: 0.5 }}
-        >
-          Tap the wax seal to enter
-        </motion.p>
-      </motion.div>
+          {/* Hint */}
+          <motion.p
+            className={`pointer-events-none absolute inset-x-0 bottom-[max(2rem,env(safe-area-inset-bottom))] text-center text-sm font-medium tracking-wide transition-colors duration-700 ${
+              isDark
+                ? "text-[#e0c88c]/85 drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]"
+                : "text-[#6b503a]/90 drop-shadow-[0_1px_2px_rgba(255,255,255,0.7)]"
+            }`}
+            initial={{ opacity: 0, y: 6 }}
+            animate={{ opacity: stage === "closed" ? 1 : 0, y: 0 }}
+            transition={{ delay: 0.6, duration: 0.6 }}
+          >
+            Tap the seal to open your invitation
+          </motion.p>
+        </motion.div>
+      )}
     </AnimatePresence>
   );
 }

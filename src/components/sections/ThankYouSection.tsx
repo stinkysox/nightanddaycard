@@ -5,14 +5,13 @@ import Reveal from "@/components/Reveal";
 import {
   couple,
   invitedBy,
-  contacts,
   thankYouMessage,
 } from "@/data/weddingData";
 
 function Candle() {
   return (
     <div className="relative w-[16px] h-[56px] mx-auto mb-6" aria-hidden="true">
-      {/* Ambient Glow — softer, smaller radius */}
+      {/* Ambient Glow */}
       <div className="absolute left-1/2 top-0 w-[46px] h-[46px] -translate-x-1/2 -translate-y-1/2 bg-[radial-gradient(circle,rgba(255,200,100,0.35)_0%,rgba(255,150,50,0.08)_50%,transparent_70%)] blur-[6px] pointer-events-none animate-[ty-glow-pulse_3s_ease-in-out_infinite] motion-reduce:animate-none" />
 
       {/* Flame */}
@@ -58,7 +57,7 @@ export default function ThankYouSection() {
           grid-template-rows: 0fr;
           transition: grid-template-rows 1s cubic-bezier(0.25, 1, 0.3, 1) 0.2s;
           width: 100%;
-          max-width: 34rem;
+          max-width: 36rem;
         }
         .ty-letter-grid.is-open {
           grid-template-rows: 1fr;
@@ -67,7 +66,6 @@ export default function ThankYouSection() {
           overflow: hidden;
         }
 
-        /* The padding sits INSIDE the hidden area to prevent layout jumps */
         .ty-letter-content {
           padding-top: 2.5rem;
           opacity: 0;
@@ -91,81 +89,75 @@ export default function ThankYouSection() {
         type="fade-up"
         className="relative z-10 w-full max-w-2xl mx-auto flex flex-col items-center"
       >
-        {/* ── Premium Envelope ── */}
-        <button
-          type="button"
-          className={`relative w-[260px] md:w-[280px] h-[170px] md:h-[180px] mx-auto block group rounded-lg transition-all duration-700 ease-out focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-4 ${
+        {/* ── Premium Envelope wrapper with smooth collapse & fade ── */}
+        <div
+          className={`w-full transition-all duration-700 ease-out overflow-hidden ${
             opened
-              ? "scale-95 translate-y-2 pointer-events-none"
-              : "hover:-translate-y-1 cursor-pointer"
+              ? "max-h-0 opacity-0 mb-0 pointer-events-none"
+              : "max-h-[300px] opacity-100 mb-8"
           }`}
-          onClick={() => setOpened(true)}
-          aria-expanded={opened}
-          aria-controls="ty-letter-panel"
-          aria-label={
-            opened ? "Letter opened" : "Break the wax seal to open your letter"
-          }
-          disabled={opened}
         >
-          {/* Envelope Back */}
-          <div className="absolute inset-0 rounded-lg bg-stone-200 shadow-2xl shadow-stone-900/10 overflow-hidden" />
-
-          {/* Left Flap */}
-          <div
-            className="absolute inset-0 bg-stone-100"
-            style={{ clipPath: "polygon(0 0, 50% 50%, 0 100%)" }}
-          />
-          {/* Right Flap */}
-          <div
-            className="absolute inset-0 bg-stone-100"
-            style={{ clipPath: "polygon(100% 0, 50% 50%, 100% 100%)" }}
-          />
-          {/* Bottom Flap */}
-          <div
-            className="absolute inset-0 bg-stone-50 shadow-[0_-2px_15px_rgba(0,0,0,0.06)]"
-            style={{ clipPath: "polygon(0 100%, 50% 48%, 100% 100%)" }}
-          />
-
-          {/* Top Flap (Animated) */}
-          <div
-            className="absolute inset-0 bg-stone-200 origin-top transition-all duration-[900ms] ease-[cubic-bezier(0.25,1,0.3,1)] shadow-sm z-10 motion-reduce:transition-none"
-            style={{
-              clipPath: "polygon(0 0, 100% 0, 50% 56%)",
-              transform: opened ? "rotateX(175deg)" : "rotateX(0deg)",
-              opacity: opened ? 0 : 1, // Fades out to prevent Safari 3D rendering bugs
-              WebkitBackfaceVisibility: "hidden", // Crucial for iOS Safari stability
-            }}
-          />
-
-          {/* ── Elegant Red Wax Seal ── */}
-          <div
-            className={`absolute inset-0 z-20 pointer-events-none transition-all duration-700 ease-[cubic-bezier(0.25,1,0.3,1)] ${
-              opened
-                ? "opacity-0 scale-110 translate-y-6"
-                : "opacity-100 scale-100"
-            }`}
+          <button
+            type="button"
+            className="relative w-[260px] md:w-[280px] h-[170px] md:h-[180px] mx-auto block group rounded-lg hover:-translate-y-1 cursor-pointer transition-transform duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-4"
+            onClick={() => setOpened(true)}
+            aria-expanded={opened}
+            aria-controls="ty-letter-panel"
+            aria-label="Break the wax seal to open your letter"
           >
-            <div className="absolute top-[52%] left-1/2 w-[66px] h-[66px] -translate-x-1/2 -translate-y-1/2 rounded-full p-[3px] bg-[radial-gradient(circle_at_35%_35%,#cc2b2b_0%,#8e0000_60%,#4a0000_100%)] shadow-[0_8px_20px_rgba(0,0,0,0.3),inset_0_2px_4px_rgba(255,255,255,0.3)] group-hover:scale-105 transition-transform duration-500 ease-out flex items-center justify-center">
-              {/* Inner Stamp Rim */}
-              <div className="w-full h-full rounded-full bg-[radial-gradient(circle_at_35%_35%,#a81313_0%,#630202_100%)] border border-[#3b0000]/60 shadow-[inset_0_3px_6px_rgba(0,0,0,0.5),0_1px_2px_rgba(255,255,255,0.2)] flex items-center justify-center">
-                <span className="font-script text-[26px] font-bold text-[#f7e3b5] drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)] select-none tracking-tight">
-                  {couple.coupleMonogramText}
-                </span>
+            {/* Envelope Back */}
+            <div className="absolute inset-0 rounded-lg bg-stone-200 shadow-2xl shadow-stone-900/10 overflow-hidden" />
+
+            {/* Left Flap */}
+            <div
+              className="absolute inset-0 bg-stone-100"
+              style={{ clipPath: "polygon(0 0, 50% 50%, 0 100%)" }}
+            />
+            {/* Right Flap */}
+            <div
+              className="absolute inset-0 bg-stone-100"
+              style={{ clipPath: "polygon(100% 0, 50% 50%, 100% 100%)" }}
+            />
+            {/* Bottom Flap */}
+            <div
+              className="absolute inset-0 bg-stone-50 shadow-[0_-2px_15px_rgba(0,0,0,0.06)]"
+              style={{ clipPath: "polygon(0 100%, 50% 48%, 100% 100%)" }}
+            />
+
+            {/* Top Flap (Animated) */}
+            <div
+              className="absolute inset-0 bg-stone-200 origin-top transition-all duration-[900ms] ease-[cubic-bezier(0.25,1,0.3,1)] shadow-sm z-10 motion-reduce:transition-none"
+              style={{
+                clipPath: "polygon(0 0, 100% 0, 50% 56%)",
+                transform: opened ? "rotateX(175deg)" : "rotateX(0deg)",
+                opacity: opened ? 0 : 1,
+                WebkitBackfaceVisibility: "hidden",
+              }}
+            />
+
+            {/* ── Red Wax Seal ── */}
+            <div
+              className={`absolute inset-0 z-20 pointer-events-none transition-all duration-700 ease-[cubic-bezier(0.25,1,0.3,1)] ${
+                opened
+                  ? "opacity-0 scale-110 translate-y-6"
+                  : "opacity-100 scale-100"
+              }`}
+            >
+              <div className="absolute top-[52%] left-1/2 w-[66px] h-[66px] -translate-x-1/2 -translate-y-1/2 rounded-full p-[3px] bg-[radial-gradient(circle_at_35%_35%,#cc2b2b_0%,#8e0000_60%,#4a0000_100%)] shadow-[0_8px_20px_rgba(0,0,0,0.3),inset_0_2px_4px_rgba(255,255,255,0.3)] group-hover:scale-105 transition-transform duration-500 ease-out flex items-center justify-center">
+                <div className="w-full h-full rounded-full bg-[radial-gradient(circle_at_35%_35%,#a81313_0%,#630202_100%)] border border-[#3b0000]/60 shadow-[inset_0_3px_6px_rgba(0,0,0,0.5),0_1px_2px_rgba(255,255,255,0.2)] flex items-center justify-center">
+                  <span className="font-script text-[26px] font-bold text-[#f7e3b5] drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)] select-none tracking-tight">
+                    {couple.coupleMonogramText}
+                  </span>
+                </div>
               </div>
             </div>
-          </div>
-        </button>
+          </button>
 
-        {/* Hint Text */}
-        <p
-          className={`font-body mt-8 text-[13px] tracking-[0.1em] uppercase text-stone-500 dark:text-stone-400 transition-all duration-500 ${
-            opened
-              ? "opacity-0 translate-y-2 pointer-events-none"
-              : "opacity-100"
-          }`}
-        >
-          Tap or click to open
-        </p>
+          {/* Hint Text */}
+          <p className="font-body mt-4 text-[13px] tracking-[0.1em] uppercase text-stone-500 dark:text-stone-400">
+            Tap or click to open
+          </p>
+        </div>
       </Reveal>
 
       {/* ── Letter Content ── */}
@@ -176,7 +168,6 @@ export default function ThankYouSection() {
       >
         <div className="ty-letter-inner">
           <div className="ty-letter-content">
-            {/* Soft paper card — gives the letter its own quiet surface instead of floating text */}
             <div className="relative rounded-2xl border border-black/5 dark:border-white/10 bg-white/50 dark:bg-white/[0.03] backdrop-blur-sm shadow-[0_20px_50px_-25px_rgba(0,0,0,0.25)] px-6 py-10 md:px-12 md:py-14">
               <span className="block uppercase tracking-[0.25em] text-[10px] font-medium text-accent/70 mb-5">
                 With Love
@@ -188,30 +179,40 @@ export default function ThankYouSection() {
                 Thank You
               </h2>
 
-              {/* Delicate Divider */}
               <div className="w-14 h-[1px] mx-auto bg-gradient-to-r from-transparent via-accent/35 to-transparent mb-7" />
 
-              {/* Message body */}
               <p className="font-body text-[15px] md:text-[16px] leading-[1.85] text-text-secondary max-w-md mx-auto font-light">
                 {thankYouMessage}
               </p>
 
-              {/* Monogram Conclusion — smaller, quieter */}
               <p className="font-script text-[34px] md:text-[38px] text-accent/80 mt-7 mb-10 leading-none">
                 {couple.coupleMonogramText}
               </p>
 
-              {/* Hosted By Block */}
-              <div className="pt-7 border-t border-black/5 dark:border-white/10 max-w-sm mx-auto">
-                <p className="font-body text-[11px] uppercase tracking-widest text-muted mb-2">
+              {/* ── Flat, Elegant Host Section (No Hierarchy) ── */}
+              <div className="pt-7 border-t border-black/5 dark:border-white/10 max-w-lg mx-auto flex flex-col items-center">
+                <p className="font-body text-[11px] uppercase tracking-widest text-muted mb-6">
                   {invitedBy.line}
                 </p>
-                <p className="font-serif text-[18px] md:text-[19px] text-text-primary font-medium tracking-wide">
-                  {invitedBy.hosts}
-                </p>
-                <p className="font-body text-[13px] text-muted font-light mt-2">
-                  {invitedBy.subline}
-                </p>
+
+                <div className="flex flex-col md:flex-row items-center justify-center gap-6 md:gap-10 w-full font-serif text-[15px] md:text-[17px] text-text-primary tracking-wide leading-relaxed">
+                  {/* Bride's Parents */}
+                  <div className="flex flex-col items-center text-center">
+                    <span>Mr. Shailendra Kumar Sinha</span>
+                    <span className="text-accent/80 font-serif italic my-0.5 text-xs">&amp;</span>
+                    <span>Mrs. Sunita Kumari Sinha</span>
+                  </div>
+
+                  {/* Subtle Separator */}
+                  <span className="hidden md:block w-1 h-8 bg-accent/20 rounded-full" />
+
+                  {/* Groom's Parents */}
+                  <div className="flex flex-col items-center text-center">
+                    <span>Mr. Prem Kant Jha</span>
+                    <span className="text-accent/80 font-serif italic my-0.5 text-xs">&amp;</span>
+                    <span>Mrs. Kundan Jha</span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -224,7 +225,6 @@ export default function ThankYouSection() {
 export function Footer() {
   return (
     <footer className="relative py-12 px-5 text-center border-t border-stone-200 dark:border-stone-800/60">
-      {/* Centered Monogram Footer */}
       <div className="flex flex-col items-center justify-center opacity-50 hover:opacity-100 transition-opacity duration-500 cursor-default">
         <p
           className="font-script text-[28px] text-accent leading-none"

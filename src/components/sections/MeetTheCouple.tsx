@@ -86,7 +86,7 @@ export default function MeetTheCouple() {
                       style={{
                         backfaceVisibility: "hidden",
                         WebkitBackfaceVisibility: "hidden",
-                        background: "var(--card-bg)",
+                        background: "var(--surface)",
                         border: "1px solid var(--border-strong)",
                       }}
                     >
@@ -114,7 +114,7 @@ export default function MeetTheCouple() {
                         backfaceVisibility: "hidden",
                         WebkitBackfaceVisibility: "hidden",
                         transform: "rotateY(180deg)",
-                        background: "var(--card-bg)",
+                        background: "var(--surface)",
                         border: "1px solid var(--border-strong)",
                       }}
                     >

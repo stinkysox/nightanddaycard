@@ -4,13 +4,20 @@ import { useEffect, useRef, useState } from "react";
 
 const playlist = [
   {
-    title: "Wedding Song",
-    artist: "Special Melody",
+    title: "Until I Found You",
+    artist: "Wedding",
     src: "/audio/audio.mp3",
   },
 ];
 
 function formatTime(s: number) {
+  if (!Number.isFinite(s) || s < 0) return "0:00";
+  const m = Math.floor(s / 60);
+  const sec = Math.floor(s % 60);
+  return `${m}:${String(sec).padStart(2, "0")}`;
+}
+
+function formatCounter(s: number) {
   if (!Number.isFinite(s) || s < 0) return "000";
   const m = Math.floor(s / 60);
   const sec = Math.floor(s % 60);
@@ -77,7 +84,6 @@ export default function VintageMusicPlayer() {
       isPlayingRef.current = false;
     };
 
-    // Pause when tab is hidden / browser is closed, resume when tab is visible again
     const onVisibilityChange = () => {
       if (document.hidden) {
         if (isPlayingRef.current) audio.pause();
@@ -86,7 +92,6 @@ export default function VintageMusicPlayer() {
       }
     };
 
-    // pagehide fires when the browser tab/window is being unloaded
     const onPageHide = () => {
       audio.pause();
     };
@@ -186,6 +191,31 @@ export default function VintageMusicPlayer() {
           box-shadow: inset 0 4px 6px rgba(0,0,0,0.6), inset 0 1px 3px rgba(0,0,0,0.8) !important;
           transform: translateY(2px);
         }
+        .seek-thumb::-webkit-slider-thumb {
+          -webkit-appearance: none;
+          appearance: none;
+          width: 13px;
+          height: 13px;
+          border-radius: 3px;
+          background: linear-gradient(180deg, #f0f2f5 0%, #b8bfc9 100%);
+          border: 1px solid #000;
+          box-shadow: 0 1px 3px rgba(0,0,0,0.6);
+          cursor: pointer;
+          margin-top: -5px;
+        }
+        .seek-thumb::-moz-range-thumb {
+          width: 13px;
+          height: 13px;
+          border-radius: 3px;
+          background: linear-gradient(180deg, #f0f2f5 0%, #b8bfc9 100%);
+          border: 1px solid #000;
+          box-shadow: 0 1px 3px rgba(0,0,0,0.6);
+          cursor: pointer;
+        }
+        .seek-thumb::-webkit-slider-runnable-track {
+          height: 3px;
+          background: transparent;
+        }
       `}</style>
 
       {/* ── INSTRUCTION TEXT ── */}
@@ -211,10 +241,8 @@ export default function VintageMusicPlayer() {
             boxShadow: "inset 0 -2px 5px rgba(0,0,0,0.3), inset 0 2px 2px rgba(255,255,255,0.8)",
           }}
         >
-          {/* Panel details */}
           <div className="absolute top-2.5 sm:top-3 left-4 right-4 flex justify-between items-start">
             <div className="flex gap-2 items-center">
-              {/* Headphone Jacks */}
               <div className="flex flex-col items-center gap-1">
                 <div className="w-3.5 h-3.5 sm:w-4 sm:h-4 rounded-full bg-gradient-to-br from-zinc-800 to-zinc-950 border border-zinc-400 shadow-inner flex items-center justify-center">
                   <div className="w-2 h-2 rounded-full bg-black shadow-[inset_0_2px_4px_rgba(0,0,0,1)]" />
@@ -228,8 +256,7 @@ export default function VintageMusicPlayer() {
                 <span className="text-[5px] sm:text-[6px] font-mono font-bold text-zinc-700 tracking-widest uppercase">Dolls</span>
               </div>
             </div>
-            
-            {/* Battery / Op LED */}
+
             <div className="flex flex-col items-center gap-1">
               <div className={`w-3 h-3 rounded-full border border-zinc-500 shadow-inner flex items-center justify-center bg-zinc-900`}>
                 <div className={`w-2 h-2 rounded-full transition-all duration-300 ${isPlaying ? 'bg-red-500 shadow-[0_0_8px_#ef4444]' : 'bg-red-950'}`} />
@@ -242,7 +269,6 @@ export default function VintageMusicPlayer() {
         {/* Brand Header */}
         <div className="px-4 sm:px-5 pt-3 sm:pt-4 pb-2">
           <div className="flex items-end gap-3">
-            {/* Fake logo mark */}
             <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-sm bg-gradient-to-br from-zinc-200 to-zinc-400 flex items-center justify-center shadow-sm">
               <div className="w-3.5 h-3.5 sm:w-4 sm:h-4 border-[2px] border-zinc-600 rounded-full flex items-center justify-center">
                 <div className="w-1.5 h-1.5 bg-zinc-600 rounded-full" />
@@ -260,9 +286,11 @@ export default function VintageMusicPlayer() {
         </div>
 
         {/* ── CASSETTE DOOR & WINDOW ── */}
-        <div className="px-3.5 sm:px-4 pb-4 relative">
+        {/* Rebuilt as a flex column instead of absolute-positioned children, so the
+            reels always sit below the label with no reliance on fixed pixel offsets. */}
+        <div className="px-3.5 sm:px-4 pb-3 relative">
           <div
-            className="rounded-lg p-2.5 sm:p-3 relative overflow-hidden"
+            className="rounded-lg p-2.5 sm:p-3 relative"
             style={{
               background: "#111418",
               boxShadow: "inset 0 6px 15px rgba(0,0,0,0.8), inset 0 1px 3px rgba(0,0,0,1), 0 1px 1px rgba(255,255,255,0.15)",
@@ -270,26 +298,35 @@ export default function VintageMusicPlayer() {
               borderBottom: "1px solid #2d455d",
             }}
           >
-            {/* Cassette Tape Plastic Housing */}
-            <div className="w-full h-full bg-[#dfdcd6] rounded relative border border-black/40 overflow-hidden shadow-[inset_0_0_15px_rgba(0,0,0,0.2)]">
-              
-              {/* Tape Label Sticker */}
-              <div className="absolute top-2 left-3 right-3 sm:left-4 sm:right-4 h-11 sm:h-12 bg-[#c64426] rounded-sm flex flex-col items-center justify-center shadow-sm border border-black/10">
-                <div className="w-full h-1 bg-white/20 absolute top-1" />
-                <p className="font-bold text-[11px] sm:text-xs text-white truncate tracking-tight z-10 px-2 w-full text-center drop-shadow-sm">
-                  {track.title}
-                </p>
-                <p className="text-[8px] sm:text-[9px] font-semibold text-white/80 truncate mt-0.5 uppercase tracking-wider z-10">
-                  {track.artist}
-                </p>
+            <div className="w-full bg-[#dfdcd6] rounded relative border border-black/40 overflow-hidden shadow-[inset_0_0_15px_rgba(0,0,0,0.2)] flex flex-col gap-2.5 sm:gap-3 p-2 sm:p-2.5">
+
+              {/* Tape Label Sticker + mechanical counter, side by side so the counter
+                  never overlaps the reels below it */}
+              <div className="flex items-stretch gap-2">
+                <div className="flex-1 h-11 sm:h-12 bg-[#c64426] rounded-sm flex flex-col items-center justify-center shadow-sm border border-black/10 relative overflow-hidden">
+                  <div className="w-full h-1 bg-white/20 absolute top-1" />
+                  <p className="font-bold text-[11px] sm:text-xs text-white truncate tracking-tight z-10 px-2 w-full text-center drop-shadow-sm">
+                    {track.title}
+                  </p>
+                  <p className="text-[8px] sm:text-[9px] font-semibold text-white/80 truncate mt-0.5 uppercase tracking-wider z-10">
+                    {track.artist}
+                  </p>
+                </div>
+
+                {/* Mechanical Tape Counter (display only, no longer overlapping reels) */}
+                <div className="bg-[#111] border-2 border-[#333] shadow-inner rounded-sm px-1.5 flex items-center shrink-0">
+                  {formatCounter(currentTime).split('').map((digit, idx) => (
+                    <div key={idx} className="bg-white text-black font-mono font-bold text-[9px] sm:text-[10px] w-2.5 text-center leading-tight mx-[1px] border border-gray-400 shadow-inner">
+                      {digit}
+                    </div>
+                  ))}
+                </div>
               </div>
 
-              {/* Tape Reels Area Background */}
-              <div className="absolute top-15 sm:top-16 left-5 right-5 sm:left-6 sm:right-6 h-12 sm:h-14 bg-[#1a1a1a] rounded-full flex justify-between items-center px-1 shadow-[inset_0_4px_10px_rgba(0,0,0,0.8)] border border-white/20">
-                
-                {/* Left Reel */}
+              {/* Tape Reels Area */}
+              <div className="w-full h-12 sm:h-14 bg-[#1a1a1a] rounded-full flex justify-between items-center px-1 shadow-[inset_0_4px_10px_rgba(0,0,0,0.8)] border border-white/20">
+
                 <div className="relative w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center">
-                  {/* Magnetic Tape Roll */}
                   <div
                     className="absolute rounded-full bg-[#2a1c14] border border-[#1a120c] transition-all duration-300 shadow-[0_0_2px_rgba(0,0,0,0.5)]"
                     style={{
@@ -297,22 +334,18 @@ export default function VintageMusicPlayer() {
                       height: `${leftTapeRadius * 2}%`,
                     }}
                   />
-                  {/* White Plastic Spool Core */}
                   <div
                     className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-[#e5e5e5] border border-gray-400 flex items-center justify-center relative z-10 shadow-sm ${isPlaying ? "animate-walkman-spool" : ""}`}
                   >
-                    {/* Gear Teeth */}
                     <div className="w-full h-full relative">
                       {[0, 60, 120].map((deg, i) => (
                         <div key={i} className="absolute inset-0 m-auto w-1 h-7 sm:h-8 bg-zinc-800" style={{ transform: `rotate(${deg}deg)` }} />
                       ))}
                     </div>
-                    {/* Spool Center Pin Hole */}
                     <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-[#111] absolute m-auto shadow-inner border border-zinc-500" />
                   </div>
                 </div>
 
-                {/* Right Reel */}
                 <div className="relative w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center">
                   <div
                     className="absolute rounded-full bg-[#2a1c14] border border-[#1a120c] transition-all duration-300 shadow-[0_0_2px_rgba(0,0,0,0.5)]"
@@ -333,40 +366,49 @@ export default function VintageMusicPlayer() {
                   </div>
                 </div>
               </div>
-              
-              {/* Transparent Window Glass Reflection */}
+
+              {/* Transparent Window Glass Reflection (decorative only, no longer intercepts taps) */}
               <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-transparent pointer-events-none transform translate-y-[-20%] rotate-12 mix-blend-overlay" />
             </div>
-            
-            {/* Mechanical Tape Counter */}
-            <div className="absolute top-3.5 sm:top-4 right-3.5 sm:right-4 bg-[#111] border-2 border-[#333] shadow-inner rounded-sm px-1.5 py-0.5 flex">
-              {formatTime(currentTime).split('').map((digit, idx) => (
-                <div key={idx} className="bg-white text-black font-mono font-bold text-[9px] sm:text-[10px] w-2.5 text-center leading-tight mx-[1px] border border-gray-400 shadow-inner">
-                  {digit}
-                </div>
-              ))}
-            </div>
-
           </div>
 
-          {/* Hidden slider for seeking over the cassette door */}
-          <input
-            type="range"
-            min={0}
-            max={100}
-            value={progress || 0}
-            onChange={seek}
-            className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20"
-            aria-label="Seek position"
-          />
+          {/* ── VISIBLE SEEK BAR ──
+              Previously an invisible slider covered the whole cassette door, so
+              tapping anywhere on the artwork silently scrubbed the track. Now
+              there's one clearly-labeled, clearly-interactive progress bar. */}
+          <div className="mt-2.5 sm:mt-3 bg-black/40 px-2 py-2 rounded-lg border border-white/5 shadow-inner">
+            <div className="flex items-center gap-2">
+              <span className="text-[8px] font-mono font-bold text-zinc-400 tracking-wider w-6 shrink-0">
+                {formatTime(currentTime)}
+              </span>
+              <div className="relative flex-1 flex items-center h-4">
+                <div className="absolute w-full h-1 bg-black rounded-full shadow-[inset_0_1px_3px_rgba(0,0,0,1)] border-b border-white/10 pointer-events-none" />
+                <div
+                  className="absolute h-1 bg-sky-300/70 rounded-full pointer-events-none transition-all"
+                  style={{ width: `${progress}%` }}
+                />
+                <input
+                  type="range"
+                  min={0}
+                  max={100}
+                  value={progress || 0}
+                  onChange={seek}
+                  className="seek-thumb w-full h-4 opacity-100 cursor-pointer z-10 appearance-none bg-transparent"
+                  aria-label="Seek position"
+                />
+              </div>
+              <span className="text-[8px] font-mono font-bold text-zinc-400 tracking-wider w-6 shrink-0 text-right">
+                {formatTime(duration)}
+              </span>
+            </div>
+          </div>
         </div>
 
         {/* ── MECHANICAL CONTROLS ── */}
         <div className="px-3.5 sm:px-4 pb-5 sm:pb-6">
           <div className="bg-[#0b141d] rounded-xl p-2.5 sm:p-3 border-t border-black/50 shadow-[inset_0_2px_10px_rgba(0,0,0,0.8)]">
-            
+
             <div className="grid grid-cols-4 gap-1.5 mb-3">
-              {/* REW Button (Disabled) */}
               <button
                 type="button"
                 onClick={prevTrack}
@@ -382,26 +424,26 @@ export default function VintageMusicPlayer() {
                 <span className="text-[7px] font-black tracking-wider mt-1 text-zinc-500">REW</span>
               </button>
 
-              {/* PLAY Button (Active) */}
               <button
                 type="button"
                 onClick={togglePlay}
                 className={`group flex flex-col items-center justify-center h-11 sm:h-12 rounded-sm transition-all ${isPlaying ? 'button-press text-white' : 'text-zinc-300 active:button-press'}`}
                 style={{
-                  background: isPlaying 
-                    ? "linear-gradient(180deg, #2b303b 0%, #15181c 100%)" 
+                  background: isPlaying
+                    ? "linear-gradient(180deg, #2b303b 0%, #15181c 100%)"
                     : "linear-gradient(180deg, #3f4551 0%, #20242a 100%)",
-                  boxShadow: isPlaying 
-                    ? "inset 0 4px 6px rgba(0,0,0,0.6), inset 0 1px 3px rgba(0,0,0,0.8)" 
+                  boxShadow: isPlaying
+                    ? "inset 0 4px 6px rgba(0,0,0,0.6), inset 0 1px 3px rgba(0,0,0,0.8)"
                     : "inset 0 1px 1px rgba(255,255,255,0.3), 0 4px 6px rgba(0,0,0,0.4), 0 1px 2px rgba(0,0,0,0.8)",
                   borderBottom: isPlaying ? "0" : "3px solid #111",
                 }}
               >
-                {ICONS.play}
-                <span className={`text-[7px] font-black tracking-wider mt-1 ${isPlaying ? 'text-zinc-200' : 'text-zinc-400 group-active:text-white'}`}>PLAY</span>
+                {isPlaying ? ICONS.pause : ICONS.play}
+                <span className={`text-[7px] font-black tracking-wider mt-1 ${isPlaying ? 'text-zinc-200' : 'text-zinc-400 group-active:text-white'}`}>
+                  {isPlaying ? "PAUSE" : "PLAY"}
+                </span>
               </button>
 
-              {/* STOP Button (Active) */}
               <button
                 type="button"
                 onClick={stopPlay}
@@ -416,7 +458,6 @@ export default function VintageMusicPlayer() {
                 <span className="text-[7px] font-black tracking-wider mt-1 text-zinc-400 group-active:text-white">STOP</span>
               </button>
 
-              {/* FF Button (Disabled) */}
               <button
                 type="button"
                 onClick={nextTrack}
@@ -437,7 +478,6 @@ export default function VintageMusicPlayer() {
             <div className="flex items-center gap-3 bg-black/40 p-2 rounded-lg border border-white/5 shadow-inner">
               <span className="text-[8px] font-mono font-bold text-zinc-400 tracking-wider">VOL</span>
               <div className="relative flex-1 flex items-center">
-                {/* Custom slider track to look like a mechanical slot */}
                 <div className="absolute w-full h-1 bg-black rounded-full shadow-[inset_0_1px_3px_rgba(0,0,0,1)] border-b border-white/10 pointer-events-none" />
                 <input
                   type="range"
@@ -449,8 +489,7 @@ export default function VintageMusicPlayer() {
                   className="w-full h-4 opacity-0 cursor-pointer z-10"
                   aria-label="Volume level"
                 />
-                {/* Custom Thumb indicator */}
-                <div 
+                <div
                   className="absolute h-3 w-4 bg-gradient-to-b from-zinc-300 to-zinc-500 rounded-[2px] shadow-md border border-black pointer-events-none flex items-center justify-center"
                   style={{ left: `calc(${volume * 100}% - 8px)` }}
                 >
@@ -458,7 +497,7 @@ export default function VintageMusicPlayer() {
                 </div>
               </div>
             </div>
-            
+
           </div>
         </div>
       </div>

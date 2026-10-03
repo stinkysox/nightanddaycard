@@ -20,12 +20,12 @@ export default function Home() {
   return (
     <>
       <AtmosphereBackground />
-      <EnvelopeGate onOpen={() => setEnvelopeOpened(true)} />
+      {!envelopeOpened && <EnvelopeGate onOpen={() => setEnvelopeOpened(true)} />}
 
       {envelopeOpened && (
         <>
           <Navbar />
-          <main className="relative overflow-x-clip w-full">
+          <main className="relative w-full">
             <Hero />
             <FairyLightDivider />
             <MusicPlayer />

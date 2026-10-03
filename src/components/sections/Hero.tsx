@@ -13,15 +13,7 @@ export default function Hero() {
     >
       {/* ── Background Image ── */}
       <div className="absolute inset-0">
-      
-        {/* Dark overlay for text legibility */}
-        <div
-          className="absolute inset-0"
-          style={{
-            background:
-              "linear-gradient(to bottom, rgba(0,0,0,0.25) 0%, rgba(0,0,0,0.45) 50%, rgba(0,0,0,0.65) 100%)",
-          }}
-        />
+        {/* Dark overlay has been removed */}
       </div>
 
       {/* ── Content ── */}
@@ -32,41 +24,39 @@ export default function Hero() {
         className="relative z-10 text-center px-6 w-full max-w-lg"
       >
         {/* Eyebrow */}
-        <p
-          className="font-display text-[11px] tracking-[0.35em] uppercase mb-6"
-          style={{ color: "rgba(255,255,255,0.6)" }}
-        >
+        <p className="font-display text-[11px] tracking-[0.35em] uppercase mb-6 text-[#9a6a32] dark:text-white/70 transition-colors duration-700">
           Together with their families
         </p>
 
         {/* Names */}
         <h1
-          className="font-script leading-[0.95]"
+          className="font-script leading-[0.95] text-[#845218] dark:text-[#fcf5e8] [text-shadow:0_1px_2px_rgba(255,255,255,0.9),0_2px_14px_rgba(212,175,55,0.25)] dark:[text-shadow:0_0_24px_rgba(212,175,55,0.4),0_0_40px_rgba(255,255,255,0.2)] transition-colors duration-700"
           style={{
-            fontSize: "clamp(52px, 14vw, 76px)",
-            color: "#fff",
+            fontSize: "clamp(54px, 14vw, 82px)",
           }}
         >
-          {couple.groom.firstName}
+          <span className="block">
+            {couple.bride.firstName}
+          </span>
           <span
-            className="block font-display text-[13px] tracking-[0.4em] uppercase my-4"
-            style={{ color: "rgba(255,255,255,0.5)" }}
+            className="block font-display text-[13px] tracking-[0.4em] uppercase my-4 text-[#a37233] dark:text-white/60 transition-colors duration-700"
+            style={{ textShadow: "none" }}
           >
             &
           </span>
-          {couple.bride.firstName}
+          <span className="block">
+            {couple.groom.firstName}
+          </span>
         </h1>
 
         {/* Thin divider */}
         <div
-          className="w-12 h-px mx-auto mt-8 mb-6"
-          style={{ background: "rgba(255,255,255,0.3)" }}
+          className="w-12 h-px mx-auto mt-8 mb-6 bg-[#b8860b]/40 dark:bg-white/30 transition-colors duration-700"
         />
 
         {/* Save the Date */}
         <p
-          className="font-display text-[11px] tracking-[0.3em] uppercase mb-1"
-          style={{ color: "rgba(255,255,255,0.5)" }}
+          className="font-display text-[11px] tracking-[0.3em] uppercase mb-1 text-[#9a6a32] dark:text-white/60 transition-colors duration-700"
         >
           Save the Date
         </p>
@@ -74,8 +64,7 @@ export default function Hero() {
         <DateScratchCard />
 
         <p
-          className="font-serif mt-4"
-          style={{ fontSize: 14, color: "rgba(255,255,255,0.5)" }}
+          className="font-serif mt-4 text-[#754b20] dark:text-white/70 text-sm transition-colors duration-700"
         >
           {invitation.venue}
         </p>
@@ -93,11 +82,11 @@ export default function Hero() {
           height="20"
           viewBox="0 0 24 24"
           fill="none"
-          stroke="rgba(255,255,255,0.35)"
+          stroke="currentColor"
           strokeWidth="1.5"
           strokeLinecap="round"
           strokeLinejoin="round"
-          className="animate-float"
+          className="animate-float text-[#9a6a32] dark:text-white/40 transition-colors duration-700"
         >
           <polyline points="6 9 12 15 18 9" />
         </svg>
